@@ -14,7 +14,7 @@ class StaffSchedulePage extends StatefulWidget {
 class _StaffSchedulePageState extends State<StaffSchedulePage> {
   List<dynamic> _allAppointments = [];
   bool _loading = true;
-  bool _showAll = false; 
+  bool _showAll = false;
   DateTime _focusedMonth = DateTime.now();
   DateTime? _selectedDay;
   String _doctorName = '';
@@ -84,20 +84,24 @@ class _StaffSchedulePageState extends State<StaffSchedulePage> {
 
   // All days in current month that have appointments
   Set<String> get _daysWithEvents {
-    return _myAppointments.map((a) {
-      try {
-        final dt = DateTime.parse(a['dateTime'] as String);
-        return '${dt.year}-${dt.month}-${dt.day}';
-      } catch (_) {
-        return '';
-      }
-    }).where((s) => s.isNotEmpty).toSet();
+    return _myAppointments
+        .map((a) {
+          try {
+            final dt = DateTime.parse(a['dateTime'] as String);
+            return '${dt.year}-${dt.month}-${dt.day}';
+          } catch (_) {
+            return '';
+          }
+        })
+        .where((s) => s.isNotEmpty)
+        .toSet();
   }
 
   @override
   Widget build(BuildContext context) {
-    final selectedAppts =
-        _selectedDay != null ? _appointmentsForDay(_selectedDay!) : [];
+    final selectedAppts = _selectedDay != null
+        ? _appointmentsForDay(_selectedDay!)
+        : [];
 
     return SafeArea(
       child: Column(
@@ -109,10 +113,11 @@ class _StaffSchedulePageState extends State<StaffSchedulePage> {
           Expanded(
             child: _loading
                 ? const Center(
-                    child: CircularProgressIndicator(color: Color(0xFF10B981)))
+                    child: CircularProgressIndicator(color: Color(0xFF10B981)),
+                  )
                 : selectedAppts.isEmpty
-                    ? _buildNone()
-                    : _buildApptList(selectedAppts),
+                ? _buildNone()
+                : _buildApptList(selectedAppts),
           ),
         ],
       ),
@@ -131,22 +136,31 @@ class _StaffSchedulePageState extends State<StaffSchedulePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('My Schedule',
-                        style: GoogleFonts.poppins(
-                            color: const Color(0xFF1E293B),
-                            fontWeight: FontWeight.w700,
-                            fontSize: 20)),
+                    Text(
+                      'My Schedule',
+                      style: GoogleFonts.poppins(
+                        color: const Color(0xFF1E293B),
+                        fontWeight: FontWeight.w700,
+                        fontSize: 20,
+                      ),
+                    ),
                     if (_doctorName.isNotEmpty)
-                      Text('Assigned to: $_doctorName',
-                          style: GoogleFonts.poppins(
-                              color: const Color(0xFF10B981),
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500)),
+                      Text(
+                        'Assigned to: $_doctorName',
+                        style: GoogleFonts.poppins(
+                          color: const Color(0xFF10B981),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                   ],
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.refresh_rounded, color: Color(0xFF10B981)),
+                icon: const Icon(
+                  Icons.refresh_rounded,
+                  color: Color(0xFF10B981),
+                ),
                 onPressed: _load,
               ),
             ],
@@ -156,13 +170,21 @@ class _StaffSchedulePageState extends State<StaffSchedulePage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                _showAll ? 'Showing ALL Clinic Appointments' : 'Showing ONLY My Appointments',
-                style: GoogleFonts.poppins(fontSize: 11, color: Colors.black54, fontWeight: FontWeight.w500),
+                _showAll
+                    ? 'Showing ALL Clinic Appointments'
+                    : 'Showing ONLY My Appointments',
+                style: GoogleFonts.poppins(
+                  fontSize: 11,
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
               Switch.adaptive(
                 value: _showAll,
                 activeThumbColor: const Color(0xFF10B981),
-                activeTrackColor: const Color(0xFF10B981).withValues(alpha: 0.5),
+                activeTrackColor: const Color(
+                  0xFF10B981,
+                ).withValues(alpha: 0.5),
                 onChanged: (val) => setState(() => _showAll = val),
               ),
             ],
@@ -173,17 +195,25 @@ class _StaffSchedulePageState extends State<StaffSchedulePage> {
   }
 
   Widget _buildCalendar() {
-    final firstDay =
-        DateTime(_focusedMonth.year, _focusedMonth.month, 1);
-    final lastDay =
-        DateTime(_focusedMonth.year, _focusedMonth.month + 1, 0);
+    final firstDay = DateTime(_focusedMonth.year, _focusedMonth.month, 1);
+    final lastDay = DateTime(_focusedMonth.year, _focusedMonth.month + 1, 0);
     final startWeekday = firstDay.weekday % 7; // Sun=0..Sat=6
     final totalCells = startWeekday + lastDay.day;
     final rows = (totalCells / 7).ceil();
 
     final months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
     ];
 
     return Container(
@@ -195,40 +225,58 @@ class _StaffSchedulePageState extends State<StaffSchedulePage> {
           Row(
             children: [
               IconButton(
-                icon: const Icon(Icons.chevron_left_rounded,
-                    color: Color(0xFF10B981)),
-                onPressed: () => setState(() => _focusedMonth =
-                    DateTime(_focusedMonth.year, _focusedMonth.month - 1)),
+                icon: const Icon(
+                  Icons.chevron_left_rounded,
+                  color: Color(0xFF10B981),
+                ),
+                onPressed: () => setState(
+                  () => _focusedMonth = DateTime(
+                    _focusedMonth.year,
+                    _focusedMonth.month - 1,
+                  ),
+                ),
               ),
               Expanded(
                 child: Text(
                   '${months[_focusedMonth.month - 1]} ${_focusedMonth.year}',
                   textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
-                      color: const Color(0xFF1E293B),
-                      fontWeight: FontWeight.w700,
-                      fontSize: 15),
+                    color: const Color(0xFF1E293B),
+                    fontWeight: FontWeight.w700,
+                    fontSize: 15,
+                  ),
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.chevron_right_rounded,
-                    color: Color(0xFF10B981)),
-                onPressed: () => setState(() => _focusedMonth =
-                    DateTime(_focusedMonth.year, _focusedMonth.month + 1)),
+                icon: const Icon(
+                  Icons.chevron_right_rounded,
+                  color: Color(0xFF10B981),
+                ),
+                onPressed: () => setState(
+                  () => _focusedMonth = DateTime(
+                    _focusedMonth.year,
+                    _focusedMonth.month + 1,
+                  ),
+                ),
               ),
             ],
           ),
           // Day labels
           Row(
             children: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
-                .map((d) => Expanded(
-                      child: Text(d,
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.poppins(
-                              color: const Color(0xFF94A3B8),
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600)),
-                    ))
+                .map(
+                  (d) => Expanded(
+                    child: Text(
+                      d,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.poppins(
+                        color: const Color(0xFF94A3B8),
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                )
                 .toList(),
           ),
           const SizedBox(height: 4),
@@ -242,14 +290,18 @@ class _StaffSchedulePageState extends State<StaffSchedulePage> {
                   return const Expanded(child: SizedBox(height: 36));
                 }
                 final day = DateTime(
-                    _focusedMonth.year, _focusedMonth.month, dayNum);
-                final key =
-                    '${day.year}-${day.month}-${day.day}';
+                  _focusedMonth.year,
+                  _focusedMonth.month,
+                  dayNum,
+                );
+                final key = '${day.year}-${day.month}-${day.day}';
                 final hasEvent = _daysWithEvents.contains(key);
-                final isSelected = _selectedDay?.year == day.year &&
+                final isSelected =
+                    _selectedDay?.year == day.year &&
                     _selectedDay?.month == day.month &&
                     _selectedDay?.day == day.day;
-                final isToday = day.year == DateTime.now().year &&
+                final isToday =
+                    day.year == DateTime.now().year &&
                     day.month == DateTime.now().month &&
                     day.day == DateTime.now().day;
 
@@ -263,29 +315,33 @@ class _StaffSchedulePageState extends State<StaffSchedulePage> {
                         color: isSelected
                             ? const Color(0xFF10B981)
                             : isToday
-                                ? const Color(0xFF10B981).withValues(alpha: 0.12)
-                                : Colors.transparent,
+                            ? const Color(0xFF10B981).withValues(alpha: 0.12)
+                            : Colors.transparent,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
-                          Text('$dayNum',
-                              style: GoogleFonts.poppins(
-                                  color: isSelected
-                                      ? Colors.white
-                                      : isToday
-                                          ? const Color(0xFF10B981)
-                                          : const Color(0xFF1E293B),
-                                  fontWeight: isSelected || isToday
-                                      ? FontWeight.w700
-                                      : FontWeight.w400,
-                                  fontSize: 13)),
+                          Text(
+                            '$dayNum',
+                            style: GoogleFonts.poppins(
+                              color: isSelected
+                                  ? Colors.white
+                                  : isToday
+                                  ? const Color(0xFF10B981)
+                                  : const Color(0xFF1E293B),
+                              fontWeight: isSelected || isToday
+                                  ? FontWeight.w700
+                                  : FontWeight.w400,
+                              fontSize: 13,
+                            ),
+                          ),
                           if (hasEvent && !isSelected)
                             Positioned(
                               bottom: 3,
                               child: Container(
-                                width: 5, height: 5,
+                                width: 5,
+                                height: 5,
                                 decoration: const BoxDecoration(
                                   color: Color(0xFF10B981),
                                   shape: BoxShape.circle,
@@ -307,8 +363,20 @@ class _StaffSchedulePageState extends State<StaffSchedulePage> {
 
   Widget _buildDayLabel(int count) {
     if (_selectedDay == null) return const SizedBox.shrink();
-    final months = ['Jan','Feb','Mar','Apr','May','Jun',
-                    'Jul','Aug','Sep','Oct','Nov','Dec'];
+    final months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
     final d = _selectedDay!;
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 8),
@@ -318,9 +386,10 @@ class _StaffSchedulePageState extends State<StaffSchedulePage> {
           Text(
             '${months[d.month - 1]} ${d.day}, ${d.year}',
             style: GoogleFonts.poppins(
-                color: const Color(0xFF1E293B),
-                fontWeight: FontWeight.w700,
-                fontSize: 14),
+              color: const Color(0xFF1E293B),
+              fontWeight: FontWeight.w700,
+              fontSize: 14,
+            ),
           ),
           const SizedBox(width: 8),
           Container(
@@ -329,11 +398,14 @@ class _StaffSchedulePageState extends State<StaffSchedulePage> {
               color: const Color(0xFF10B981).withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Text('$count appt${count == 1 ? '' : 's'}',
-                style: GoogleFonts.poppins(
-                    color: const Color(0xFF10B981),
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600)),
+            child: Text(
+              '$count appt${count == 1 ? '' : 's'}',
+              style: GoogleFonts.poppins(
+                color: const Color(0xFF10B981),
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
         ],
       ),
@@ -345,12 +417,19 @@ class _StaffSchedulePageState extends State<StaffSchedulePage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.event_available_rounded,
-              color: Color(0xFFCBD5E1), size: 48),
+          const Icon(
+            Icons.event_available_rounded,
+            color: Color(0xFFCBD5E1),
+            size: 48,
+          ),
           const SizedBox(height: 12),
-          Text('No appointments on this day',
-              style: GoogleFonts.poppins(
-                  color: const Color(0xFF94A3B8), fontSize: 13)),
+          Text(
+            'No appointments on this day',
+            style: GoogleFonts.poppins(
+              color: const Color(0xFF94A3B8),
+              fontSize: 13,
+            ),
+          ),
         ],
       ),
     );
@@ -379,15 +458,17 @@ class _StaffSchedulePageState extends State<StaffSchedulePage> {
     }
 
     DateTime? dt;
-    try { dt = DateTime.parse(a['dateTime'] as String); } catch (_) {}
+    try {
+      dt = DateTime.parse(a['dateTime'] as String);
+    } catch (_) {}
 
     // ── Phase 3 payment fields ──────────────────────────────────────
     final paymentMethod = (a['paymentMethod'] ?? '').toString();
-    final payStatus     = (a['paymentStatus'] ?? '').toString();
-    final balance       = (a['balanceRemaining'] as num?)?.toDouble() ?? 0.0;
-    final totalPrice    = (a['totalPrice'] as num?)?.toDouble() ?? 0.0;
+    final payStatus = (a['paymentStatus'] ?? '').toString();
+    final balance = (a['balanceRemaining'] as num?)?.toDouble() ?? 0.0;
+    final totalPrice = (a['totalPrice'] as num?)?.toDouble() ?? 0.0;
     final hasPaymentData = paymentMethod.isNotEmpty || totalPrice > 0;
-    final isFullyPaid   = payStatus == 'fully_paid' || balance <= 0;
+    final isFullyPaid = payStatus == 'fully_paid' || balance <= 0;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -396,9 +477,10 @@ class _StaffSchedulePageState extends State<StaffSchedulePage> {
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-              color: color.withValues(alpha: 0.1),
-              blurRadius: 10,
-              offset: const Offset(0, 3))
+            color: color.withValues(alpha: 0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
         ],
         border: Border(left: BorderSide(color: color, width: 4)),
       ),
@@ -414,34 +496,50 @@ class _StaffSchedulePageState extends State<StaffSchedulePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(a['service'] ?? 'Service',
-                          style: GoogleFonts.poppins(
-                              color: const Color(0xFF1E293B),
-                              fontWeight: FontWeight.w700,
-                              fontSize: 14)),
+                      Text(
+                        a['service'] ?? 'Service',
+                        style: GoogleFonts.poppins(
+                          color: const Color(0xFF1E293B),
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                        ),
+                      ),
                       const SizedBox(height: 2),
                       Text(
-                          '${a['user_name'] ?? 'Owner'}  ·  Pet: ${a['pet'] ?? '-'}',
-                          style: GoogleFonts.poppins(
-                              color: const Color(0xFF94A3B8), fontSize: 12)),
+                        '${a['user_name'] ?? 'Owner'}  ·  Pet: ${a['pet'] ?? '-'}',
+                        style: GoogleFonts.poppins(
+                          color: const Color(0xFF94A3B8),
+                          fontSize: 12,
+                        ),
+                      ),
                       if (dt != null)
-                        Text(_timeStr(dt),
-                            style: GoogleFonts.poppins(
-                                color: const Color(0xFF64748B), fontSize: 11)),
+                        Text(
+                          _timeStr(dt),
+                          style: GoogleFonts.poppins(
+                            color: const Color(0xFF64748B),
+                            fontSize: 11,
+                          ),
+                        ),
                     ],
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: color.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Text(status,
-                      style: GoogleFonts.poppins(
-                          color: color,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600)),
+                  child: Text(
+                    status,
+                    style: GoogleFonts.poppins(
+                      color: color,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -459,27 +557,35 @@ class _StaffSchedulePageState extends State<StaffSchedulePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Billing',
-                        style: GoogleFonts.poppins(
-                            color: const Color(0xFF1E293B),
-                            fontWeight: FontWeight.w700,
-                            fontSize: 12)),
+                    Text(
+                      'Billing',
+                      style: GoogleFonts.poppins(
+                        color: const Color(0xFF1E293B),
+                        fontWeight: FontWeight.w700,
+                        fontSize: 12,
+                      ),
+                    ),
                     const SizedBox(height: 8),
                     if (totalPrice > 0)
-                      _billingRow('Total', '₱${totalPrice.toStringAsFixed(2)}',
-                          const Color(0xFF1E293B)),
+                      _billingRow(
+                        'Total',
+                        '₱${totalPrice.toStringAsFixed(2)}',
+                        const Color(0xFF1E293B),
+                      ),
                     if (balance > 0) ...[
                       _billingRow(
-                          'Balance Remaining',
-                          '₱${balance.toStringAsFixed(2)}',
-                          const Color(0xFFF59E0B)),
+                        'Balance Remaining',
+                        '₱${balance.toStringAsFixed(2)}',
+                        const Color(0xFFF59E0B),
+                      ),
                     ],
                     _billingRow(
-                        'Payment Status',
-                        payStatus.replaceAll('_', ' '),
-                        isFullyPaid
-                            ? const Color(0xFF10B981)
-                            : const Color(0xFFF59E0B)),
+                      'Payment Status',
+                      payStatus.replaceAll('_', ' '),
+                      isFullyPaid
+                          ? const Color(0xFF10B981)
+                          : const Color(0xFFF59E0B),
+                    ),
                   ],
                 ),
               ),
@@ -491,19 +597,24 @@ class _StaffSchedulePageState extends State<StaffSchedulePage> {
                   width: double.infinity,
                   child: ElevatedButton.icon(
                     onPressed: () => _markOtcPaid(a),
-                    icon: const Icon(Icons.payments_rounded,
-                        size: 16, color: Colors.white),
+                    icon: const Icon(
+                      Icons.payments_rounded,
+                      size: 16,
+                      color: Colors.white,
+                    ),
                     label: Text(
                       'Mark Balance Paid (OTC)  ₱${balance.toStringAsFixed(2)}',
                       style: GoogleFonts.poppins(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 13),
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13,
+                      ),
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFF59E0B),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       elevation: 0,
                     ),
@@ -518,31 +629,36 @@ class _StaffSchedulePageState extends State<StaffSchedulePage> {
                 width: double.infinity,
                 child: OutlinedButton.icon(
                   onPressed: (hasPaymentData && !isFullyPaid)
-                      ? null   // blocked — balance unpaid
+                      ? null // blocked — balance unpaid
                       : () => _markComplete(a),
-                  icon: Icon(Icons.task_alt_rounded,
-                      size: 16,
-                      color: (hasPaymentData && !isFullyPaid)
-                          ? const Color(0xFFCBD5E1)
-                          : const Color(0xFF10B981)),
+                  icon: Icon(
+                    Icons.task_alt_rounded,
+                    size: 16,
+                    color: (hasPaymentData && !isFullyPaid)
+                        ? const Color(0xFFCBD5E1)
+                        : const Color(0xFF10B981),
+                  ),
                   label: Text(
                     (hasPaymentData && !isFullyPaid)
                         ? 'Complete (pay balance first)'
                         : 'Mark as Completed',
                     style: GoogleFonts.poppins(
-                        color: (hasPaymentData && !isFullyPaid)
-                            ? const Color(0xFFCBD5E1)
-                            : const Color(0xFF10B981),
-                        fontWeight: FontWeight.w600,
-                        fontSize: 13),
+                      color: (hasPaymentData && !isFullyPaid)
+                          ? const Color(0xFFCBD5E1)
+                          : const Color(0xFF10B981),
+                      fontWeight: FontWeight.w600,
+                      fontSize: 13,
+                    ),
                   ),
                   style: OutlinedButton.styleFrom(
                     side: BorderSide(
-                        color: (hasPaymentData && !isFullyPaid)
-                            ? const Color(0xFFE2E8F0)
-                            : const Color(0xFF10B981)),
+                      color: (hasPaymentData && !isFullyPaid)
+                          ? const Color(0xFFE2E8F0)
+                          : const Color(0xFF10B981),
+                    ),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     padding: const EdgeInsets.symmetric(vertical: 10),
                   ),
                 ),
@@ -560,13 +676,22 @@ class _StaffSchedulePageState extends State<StaffSchedulePage> {
       child: Row(
         children: [
           Expanded(
-            child: Text(label,
-                style: GoogleFonts.poppins(
-                    color: const Color(0xFF64748B), fontSize: 11)),
-          ),
-          Text(value,
+            child: Text(
+              label,
               style: GoogleFonts.poppins(
-                  color: color, fontWeight: FontWeight.w600, fontSize: 12)),
+                color: const Color(0xFF64748B),
+                fontSize: 11,
+              ),
+            ),
+          ),
+          Text(
+            value,
+            style: GoogleFonts.poppins(
+              color: color,
+              fontWeight: FontWeight.w600,
+              fontSize: 12,
+            ),
+          ),
         ],
       ),
     );
@@ -583,26 +708,40 @@ class _StaffSchedulePageState extends State<StaffSchedulePage> {
       context: context,
       builder: (_) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text('Confirm OTC Payment',
-            style: GoogleFonts.poppins(fontWeight: FontWeight.w700)),
+        title: Text(
+          'Confirm OTC Payment',
+          style: GoogleFonts.poppins(fontWeight: FontWeight.w700),
+        ),
         content: Text(
-            'Mark the remaining balance of ₱${((a['balanceRemaining'] as num?)?.toDouble() ?? 0.0).toStringAsFixed(2)} as collected in-clinic?',
-            style: GoogleFonts.poppins(color: const Color(0xFF64748B), fontSize: 13)),
+          'Mark the remaining balance of ₱${((a['balanceRemaining'] as num?)?.toDouble() ?? 0.0).toStringAsFixed(2)} as collected in-clinic?',
+          style: GoogleFonts.poppins(
+            color: const Color(0xFF64748B),
+            fontSize: 13,
+          ),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text('Cancel',
-                style: GoogleFonts.poppins(color: const Color(0xFF64748B))),
+            child: Text(
+              'Cancel',
+              style: GoogleFonts.poppins(color: const Color(0xFF64748B)),
+            ),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFF59E0B),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12))),
+              backgroundColor: const Color(0xFFF59E0B),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
             onPressed: () => Navigator.pop(context, true),
-            child: Text('Confirm',
-                style: GoogleFonts.poppins(
-                    color: Colors.white, fontWeight: FontWeight.w600)),
+            child: Text(
+              'Confirm',
+              style: GoogleFonts.poppins(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
         ],
       ),
@@ -610,7 +749,9 @@ class _StaffSchedulePageState extends State<StaffSchedulePage> {
     if (confirmed == true) {
       try {
         await AdminApiService.markBalancePaid(
-            userId: userId, appointmentId: apptId);
+          userId: userId,
+          appointmentId: apptId,
+        );
         _showSnack('Balance marked as paid ✓', const Color(0xFF10B981));
         _load();
       } catch (e) {
@@ -636,12 +777,14 @@ class _StaffSchedulePageState extends State<StaffSchedulePage> {
   }
 
   void _showSnack(String msg, Color color) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(msg, style: GoogleFonts.poppins(color: Colors.white)),
-      backgroundColor: color,
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-    ));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(msg, style: GoogleFonts.poppins(color: Colors.white)),
+        backgroundColor: color,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+    );
   }
 
   String _timeStr(DateTime d) {

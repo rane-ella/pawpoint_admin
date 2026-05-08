@@ -47,7 +47,7 @@ class _VerifyAdminEmailPageState extends State<VerifyAdminEmailPage> {
 
   Future<void> _activateAndProceed() async {
     final uid = _auth.currentUser!.uid;
-    
+
     // Activate the account in Firestore
     try {
       await AdminApiService.markStaffActive(uid);
@@ -67,16 +67,16 @@ class _VerifyAdminEmailPageState extends State<VerifyAdminEmailPage> {
 
   Future<void> _resendVerification() async {
     if (!_canResend) return;
-    
+
     try {
       await _auth.currentUser?.sendEmailVerification();
       _showSnack('Verification email sent!', isError: false);
-      
+
       setState(() {
         _canResend = false;
         _resendCooldown = 60;
       });
-      
+
       _cooldownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
         setState(() {
           if (_resendCooldown > 0) {
@@ -112,7 +112,11 @@ class _VerifyAdminEmailPageState extends State<VerifyAdminEmailPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.mark_email_read_outlined, size: 80, color: AppColors.primary),
+              const Icon(
+                Icons.mark_email_read_outlined,
+                size: 80,
+                color: AppColors.primary,
+              ),
               const SizedBox(height: 30),
               Text(
                 'Verify Your Email',
@@ -126,10 +130,7 @@ class _VerifyAdminEmailPageState extends State<VerifyAdminEmailPage> {
               Text(
                 'A verification link has been sent to your email. Please click the link to activate your account.',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.poppins(
-                  fontSize: 16,
-                  color: Colors.black54,
-                ),
+                style: GoogleFonts.poppins(fontSize: 16, color: Colors.black54),
               ),
               const SizedBox(height: 40),
               if (_isVerifying)
@@ -143,7 +144,9 @@ class _VerifyAdminEmailPageState extends State<VerifyAdminEmailPage> {
                     if (_auth.currentUser?.emailVerified == true) {
                       _activateAndProceed();
                     } else {
-                      _showSnack('Email not verified yet. Please check your inbox.');
+                      _showSnack(
+                        'Email not verified yet. Please check your inbox.',
+                      );
                     }
                     setState(() => _isVerifying = false);
                   },
@@ -152,9 +155,7 @@ class _VerifyAdminEmailPageState extends State<VerifyAdminEmailPage> {
               TextButton(
                 onPressed: _canResend ? _resendVerification : null,
                 child: Text(
-                  _canResend 
-                    ? 'Resend Email' 
-                    : 'Resend in ${_resendCooldown}s',
+                  _canResend ? 'Resend Email' : 'Resend in ${_resendCooldown}s',
                   style: GoogleFonts.poppins(
                     color: _canResend ? AppColors.primary : Colors.grey,
                     fontWeight: FontWeight.w600,
@@ -162,7 +163,8 @@ class _VerifyAdminEmailPageState extends State<VerifyAdminEmailPage> {
                 ),
               ),
               TextButton(
-                onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
+                onPressed: () =>
+                    Navigator.pushReplacementNamed(context, '/login'),
                 child: Text(
                   'Back to Login',
                   style: GoogleFonts.poppins(color: Colors.black38),

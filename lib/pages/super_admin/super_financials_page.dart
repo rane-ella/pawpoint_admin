@@ -41,7 +41,12 @@ class _SuperFinancialsPageState extends State<SuperFinancialsPage>
     setState(() => _loadingFinancials = true);
     try {
       final data = await AdminApiService.fetchFinancials();
-      if (mounted) setState(() { _financials = data; _loadingFinancials = false; });
+      if (mounted) {
+        setState(() {
+          _financials = data;
+          _loadingFinancials = false;
+        });
+      }
     } catch (_) {
       if (mounted) setState(() => _loadingFinancials = false);
     }
@@ -51,7 +56,12 @@ class _SuperFinancialsPageState extends State<SuperFinancialsPage>
     setState(() => _loadingTx = true);
     try {
       final data = await AdminApiService.fetchTransactions();
-      if (mounted) setState(() { _transactions = data; _loadingTx = false; });
+      if (mounted) {
+        setState(() {
+          _transactions = data;
+          _loadingTx = false;
+        });
+      }
     } catch (_) {
       if (mounted) setState(() => _loadingTx = false);
     }
@@ -78,10 +88,7 @@ class _SuperFinancialsPageState extends State<SuperFinancialsPage>
           Expanded(
             child: TabBarView(
               controller: _tabCtrl,
-              children: [
-                _buildOverviewTab(),
-                _buildLedgerTab(),
-              ],
+              children: [_buildOverviewTab(), _buildLedgerTab()],
             ),
           ),
         ],
@@ -95,11 +102,14 @@ class _SuperFinancialsPageState extends State<SuperFinancialsPage>
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
       child: Row(
         children: [
-          Text('Financial Overview',
-              style: GoogleFonts.poppins(
-                  color: const Color(0xFF1E293B),
-                  fontWeight: FontWeight.w700,
-                  fontSize: 18)),
+          Text(
+            'Financial Overview',
+            style: GoogleFonts.poppins(
+              color: const Color(0xFF1E293B),
+              fontWeight: FontWeight.w700,
+              fontSize: 18,
+            ),
+          ),
           const Spacer(),
           IconButton(
             icon: const Icon(Icons.refresh_rounded, color: Color(0xFF10B981)),
@@ -128,8 +138,10 @@ class _SuperFinancialsPageState extends State<SuperFinancialsPage>
         dividerColor: Colors.transparent,
         labelColor: Colors.white,
         unselectedLabelColor: const Color(0xFF64748B),
-        labelStyle:
-            GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 13),
+        labelStyle: GoogleFonts.poppins(
+          fontWeight: FontWeight.w600,
+          fontSize: 13,
+        ),
         tabs: const [
           Tab(text: 'Overview'),
           Tab(text: 'Transaction Ledger'),
@@ -142,14 +154,14 @@ class _SuperFinancialsPageState extends State<SuperFinancialsPage>
   Widget _buildOverviewTab() {
     if (_loadingFinancials) {
       return const Center(
-          child: CircularProgressIndicator(color: Color(0xFF10B981)));
+        child: CircularProgressIndicator(color: Color(0xFF10B981)),
+      );
     }
     final f = _financials ?? {};
     final gross = (f['gross_revenue'] as num?)?.toDouble() ?? 0.0;
     final collected = (f['cash_collected'] as num?)?.toDouble() ?? 0.0;
     final pending = (f['pending_receivables'] as num?)?.toDouble() ?? 0.0;
-    final serviceRev =
-        Map<String, dynamic>.from(f['service_revenue'] ?? {});
+    final serviceRev = Map<String, dynamic>.from(f['service_revenue'] ?? {});
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -160,28 +172,44 @@ class _SuperFinancialsPageState extends State<SuperFinancialsPage>
           Row(
             children: [
               Expanded(
-                  child: _kpiCard('Gross Revenue', gross,
-                      Icons.monetization_on_rounded, const Color(0xFF6366F1))),
+                child: _kpiCard(
+                  'Gross Revenue',
+                  gross,
+                  Icons.monetization_on_rounded,
+                  const Color(0xFF6366F1),
+                ),
+              ),
               const SizedBox(width: 12),
               Expanded(
-                  child: _kpiCard('Cash Collected', collected,
-                      Icons.account_balance_wallet_rounded,
-                      const Color(0xFF10B981))),
+                child: _kpiCard(
+                  'Cash Collected',
+                  collected,
+                  Icons.account_balance_wallet_rounded,
+                  const Color(0xFF10B981),
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 12),
-          _kpiCard('Pending Receivables', pending,
-              Icons.hourglass_top_rounded, const Color(0xFFF59E0B),
-              fullWidth: true),
+          _kpiCard(
+            'Pending Receivables',
+            pending,
+            Icons.hourglass_top_rounded,
+            const Color(0xFFF59E0B),
+            fullWidth: true,
+          ),
           const SizedBox(height: 24),
 
           // ── Revenue by Service ──────────────────────────────────────
           if (serviceRev.isNotEmpty) ...[
-            Text('Revenue by Service',
-                style: GoogleFonts.poppins(
-                    color: const Color(0xFF1E293B),
-                    fontWeight: FontWeight.w700,
-                    fontSize: 15)),
+            Text(
+              'Revenue by Service',
+              style: GoogleFonts.poppins(
+                color: const Color(0xFF1E293B),
+                fontWeight: FontWeight.w700,
+                fontSize: 15,
+              ),
+            ),
             const SizedBox(height: 12),
             _buildServiceChart(serviceRev, gross),
             const SizedBox(height: 24),
@@ -191,8 +219,13 @@ class _SuperFinancialsPageState extends State<SuperFinancialsPage>
     );
   }
 
-  Widget _kpiCard(String label, double value, IconData icon, Color color,
-      {bool fullWidth = false}) {
+  Widget _kpiCard(
+    String label,
+    double value,
+    IconData icon,
+    Color color, {
+    bool fullWidth = false,
+  }) {
     return Container(
       width: fullWidth ? double.infinity : null,
       padding: const EdgeInsets.all(18),
@@ -216,15 +249,22 @@ class _SuperFinancialsPageState extends State<SuperFinancialsPage>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label,
-                    style: GoogleFonts.poppins(
-                        color: const Color(0xFF64748B), fontSize: 12)),
+                Text(
+                  label,
+                  style: GoogleFonts.poppins(
+                    color: const Color(0xFF64748B),
+                    fontSize: 12,
+                  ),
+                ),
                 const SizedBox(height: 2),
-                Text('₱${value.toStringAsFixed(2)}',
-                    style: GoogleFonts.poppins(
-                        color: const Color(0xFF1E293B),
-                        fontWeight: FontWeight.w700,
-                        fontSize: 20)),
+                Text(
+                  '₱${value.toStringAsFixed(2)}',
+                  style: GoogleFonts.poppins(
+                    color: const Color(0xFF1E293B),
+                    fontWeight: FontWeight.w700,
+                    fontSize: 20,
+                  ),
+                ),
               ],
             ),
           ),
@@ -244,8 +284,7 @@ class _SuperFinancialsPageState extends State<SuperFinancialsPage>
     ];
     int ci = 0;
     final entries = data.entries.toList()
-      ..sort((a, b) =>
-          (b.value as num).compareTo(a.value as num));
+      ..sort((a, b) => (b.value as num).compareTo(a.value as num));
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -267,21 +306,31 @@ class _SuperFinancialsPageState extends State<SuperFinancialsPage>
                 Row(
                   children: [
                     Expanded(
-                      child: Text(e.key,
-                          style: GoogleFonts.poppins(
-                              color: const Color(0xFF1E293B),
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500)),
+                      child: Text(
+                        e.key,
+                        style: GoogleFonts.poppins(
+                          color: const Color(0xFF1E293B),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ),
-                    Text('₱${rev.toStringAsFixed(2)}',
-                        style: GoogleFonts.poppins(
-                            color: color,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 13)),
+                    Text(
+                      '₱${rev.toStringAsFixed(2)}',
+                      style: GoogleFonts.poppins(
+                        color: color,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 13,
+                      ),
+                    ),
                     const SizedBox(width: 8),
-                    Text('${(pct * 100).toStringAsFixed(1)}%',
-                        style: GoogleFonts.poppins(
-                            color: const Color(0xFF64748B), fontSize: 12)),
+                    Text(
+                      '${(pct * 100).toStringAsFixed(1)}%',
+                      style: GoogleFonts.poppins(
+                        color: const Color(0xFF64748B),
+                        fontSize: 12,
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 6),
@@ -310,10 +359,11 @@ class _SuperFinancialsPageState extends State<SuperFinancialsPage>
         Expanded(
           child: _loadingTx
               ? const Center(
-                  child: CircularProgressIndicator(color: Color(0xFF10B981)))
+                  child: CircularProgressIndicator(color: Color(0xFF10B981)),
+                )
               : _filteredTx.isEmpty
-                  ? _buildEmptyLedger()
-                  : _buildLedgerList(),
+              ? _buildEmptyLedger()
+              : _buildLedgerList(),
         ),
       ],
     );
@@ -323,13 +373,20 @@ class _SuperFinancialsPageState extends State<SuperFinancialsPage>
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
       child: TextField(
-        style: GoogleFonts.poppins(color: const Color(0xFF1E293B), fontSize: 13),
+        style: GoogleFonts.poppins(
+          color: const Color(0xFF1E293B),
+          fontSize: 13,
+        ),
         decoration: InputDecoration(
           hintText: 'Search by user, service, or transaction ID…',
-          hintStyle:
-              GoogleFonts.poppins(color: const Color(0xFF64748B), fontSize: 13),
-          prefixIcon:
-              const Icon(Icons.search_rounded, color: Color(0xFF94A3B8)),
+          hintStyle: GoogleFonts.poppins(
+            color: const Color(0xFF64748B),
+            fontSize: 13,
+          ),
+          prefixIcon: const Icon(
+            Icons.search_rounded,
+            color: Color(0xFF94A3B8),
+          ),
           filled: true,
           fillColor: const Color(0xFFF8FAFF),
           border: OutlineInputBorder(
@@ -352,18 +409,28 @@ class _SuperFinancialsPageState extends State<SuperFinancialsPage>
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.receipt_long_outlined,
-              size: 52, color: Color(0xFFE2E8F0)),
+          const Icon(
+            Icons.receipt_long_outlined,
+            size: 52,
+            color: Color(0xFFE2E8F0),
+          ),
           const SizedBox(height: 14),
-          Text('No transactions yet',
-              style: GoogleFonts.poppins(
-                  color: const Color(0xFF64748B), fontSize: 14)),
+          Text(
+            'No transactions yet',
+            style: GoogleFonts.poppins(
+              color: const Color(0xFF64748B),
+              fontSize: 14,
+            ),
+          ),
           const SizedBox(height: 6),
           Text(
-              'Transactions appear once appointments include\npayment data (Phase 3 checkout flow).',
-              textAlign: TextAlign.center,
-              style: GoogleFonts.poppins(
-                  color: const Color(0xFF94A3B8), fontSize: 12)),
+            'Transactions appear once appointments include\npayment data (Phase 3 checkout flow).',
+            textAlign: TextAlign.center,
+            style: GoogleFonts.poppins(
+              color: const Color(0xFF94A3B8),
+              fontSize: 12,
+            ),
+          ),
         ],
       ),
     );
@@ -418,39 +485,59 @@ class _SuperFinancialsPageState extends State<SuperFinancialsPage>
               Row(
                 children: [
                   Expanded(
-                    child: Text(tx['user_name'] ?? 'Unknown',
-                        style: GoogleFonts.poppins(
-                            color: const Color(0xFF1E293B),
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13)),
-                  ),
-                  Text('₱${total.toStringAsFixed(2)}',
+                    child: Text(
+                      tx['user_name'] ?? 'Unknown',
                       style: GoogleFonts.poppins(
-                          color: const Color(0xFF1E293B),
-                          fontWeight: FontWeight.w700,
-                          fontSize: 15)),
+                        color: const Color(0xFF1E293B),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    '₱${total.toStringAsFixed(2)}',
+                    style: GoogleFonts.poppins(
+                      color: const Color(0xFF1E293B),
+                      fontWeight: FontWeight.w700,
+                      fontSize: 15,
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 4),
               Row(
                 children: [
-                  Text(tx['service'] ?? '',
-                      style: GoogleFonts.poppins(
-                          color: const Color(0xFF64748B), fontSize: 11)),
+                  Text(
+                    tx['service'] ?? '',
+                    style: GoogleFonts.poppins(
+                      color: const Color(0xFF64748B),
+                      fontSize: 11,
+                    ),
+                  ),
                   if (dt != null) ...[
-                    const Text(' · ',
-                        style: TextStyle(color: Color(0xFF94A3B8))),
-                    Text(_fmtDate(dt),
-                        style: GoogleFonts.poppins(
-                            color: const Color(0xFF94A3B8), fontSize: 11)),
+                    const Text(
+                      ' · ',
+                      style: TextStyle(color: Color(0xFF94A3B8)),
+                    ),
+                    Text(
+                      _fmtDate(dt),
+                      style: GoogleFonts.poppins(
+                        color: const Color(0xFF94A3B8),
+                        fontSize: 11,
+                      ),
+                    ),
                   ],
                 ],
               ),
               if (txId.isNotEmpty) ...[
                 const SizedBox(height: 2),
-                Text('ID: $txId',
-                    style: GoogleFonts.poppins(
-                        color: const Color(0xFF94A3B8), fontSize: 10)),
+                Text(
+                  'ID: $txId',
+                  style: GoogleFonts.poppins(
+                    color: const Color(0xFF94A3B8),
+                    fontSize: 10,
+                  ),
+                ),
               ],
               const SizedBox(height: 8),
               Row(
@@ -458,9 +545,13 @@ class _SuperFinancialsPageState extends State<SuperFinancialsPage>
                   _badge(status.replaceAll('_', ' '), statusColor),
                   const Spacer(),
                   if (balance > 0)
-                    Text('Balance: ₱${balance.toStringAsFixed(2)}',
-                        style: GoogleFonts.poppins(
-                            color: const Color(0xFFF59E0B), fontSize: 11)),
+                    Text(
+                      'Balance: ₱${balance.toStringAsFixed(2)}',
+                      style: GoogleFonts.poppins(
+                        color: const Color(0xFFF59E0B),
+                        fontSize: 11,
+                      ),
+                    ),
                 ],
               ),
             ],
@@ -479,7 +570,8 @@ class _SuperFinancialsPageState extends State<SuperFinancialsPage>
     bool isUpdating = false;
 
     // We can't collect balance for services that were never performed
-    final bool isCanceled = (apptStatus == 'cancelled' ||
+    final bool isCanceled =
+        (apptStatus == 'cancelled' ||
         apptStatus == 'auto_cancelled' ||
         apptStatus == 'rejected');
 
@@ -489,12 +581,16 @@ class _SuperFinancialsPageState extends State<SuperFinancialsPage>
         builder: (ctx, setModalState) {
           return AlertDialog(
             backgroundColor: Colors.white,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            title: Text('Transaction Detail',
-                style: GoogleFonts.poppins(
-                    color: const Color(0xFF1E293B),
-                    fontWeight: FontWeight.w700)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            title: Text(
+              'Transaction Detail',
+              style: GoogleFonts.poppins(
+                color: const Color(0xFF1E293B),
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             content: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -513,30 +609,47 @@ class _SuperFinancialsPageState extends State<SuperFinancialsPage>
                     }
                   }()),
                   const Divider(color: Color(0xFFE2E8F0), height: 32),
-                  _detailItem('Total Price', '₱${total.toStringAsFixed(2)}',
-                      isBold: true),
-                  _detailItem('Paid Online', '₱${paid.toStringAsFixed(2)}',
-                      color: const Color(0xFF10B981)),
-                  _detailItem('Remaining Balance',
-                      '₱${balance.toStringAsFixed(2)}',
-                      color: balance > 0
-                          ? const Color(0xFFF59E0B)
-                          : const Color(0xFF64748B)),
-                  _detailItem('Payment Status', status.replaceAll('_', ' ').toUpperCase(),
-                      color: status == 'fully_paid'
-                          ? const Color(0xFF10B981)
-                          : const Color(0xFFF59E0B)),
-                  _detailItem('Appt Status', apptStatus.toUpperCase(),
-                      color: isCanceled ? const Color(0xFFEF4444) : const Color(0xFF1E293B)),
+                  _detailItem(
+                    'Total Price',
+                    '₱${total.toStringAsFixed(2)}',
+                    isBold: true,
+                  ),
+                  _detailItem(
+                    'Paid Online',
+                    '₱${paid.toStringAsFixed(2)}',
+                    color: const Color(0xFF10B981),
+                  ),
+                  _detailItem(
+                    'Remaining Balance',
+                    '₱${balance.toStringAsFixed(2)}',
+                    color: balance > 0
+                        ? const Color(0xFFF59E0B)
+                        : const Color(0xFF64748B),
+                  ),
+                  _detailItem(
+                    'Payment Status',
+                    status.replaceAll('_', ' ').toUpperCase(),
+                    color: status == 'fully_paid'
+                        ? const Color(0xFF10B981)
+                        : const Color(0xFFF59E0B),
+                  ),
+                  _detailItem(
+                    'Appt Status',
+                    apptStatus.toUpperCase(),
+                    color: isCanceled
+                        ? const Color(0xFFEF4444)
+                        : const Color(0xFF1E293B),
+                  ),
                   if (isCanceled && balance > 0)
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Text(
                         'Note: Balance collection is disabled because the appointment was canceled/rejected.',
                         style: GoogleFonts.poppins(
-                            color: const Color(0xFFEF4444),
-                            fontSize: 10,
-                            fontStyle: FontStyle.italic),
+                          color: const Color(0xFFEF4444),
+                          fontSize: 10,
+                          fontStyle: FontStyle.italic,
+                        ),
                       ),
                     ),
                   if (tx['transactionId'] != null)
@@ -547,8 +660,10 @@ class _SuperFinancialsPageState extends State<SuperFinancialsPage>
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(ctx),
-                child: Text('CLOSE',
-                    style: GoogleFonts.poppins(color: const Color(0xFF64748B))),
+                child: Text(
+                  'CLOSE',
+                  style: GoogleFonts.poppins(color: const Color(0xFF64748B)),
+                ),
               ),
               if (status == 'partially_paid' && balance > 0 && !isCanceled)
                 ElevatedButton(
@@ -567,8 +682,8 @@ class _SuperFinancialsPageState extends State<SuperFinancialsPage>
                             Navigator.pop(ctx);
                             messenger.showSnackBar(
                               const SnackBar(
-                                  content:
-                                      Text('Payment updated successfully!')),
+                                content: Text('Payment updated successfully!'),
+                              ),
                             );
                           } catch (e) {
                             if (!ctx.mounted) return;
@@ -582,18 +697,25 @@ class _SuperFinancialsPageState extends State<SuperFinancialsPage>
                     backgroundColor: const Color(0xFF10B981),
                     elevation: 0,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                   child: isUpdating
                       ? const SizedBox(
                           width: 20,
                           height: 20,
                           child: CircularProgressIndicator(
-                              strokeWidth: 2, color: Colors.white))
-                      : Text('COLLECT BALANCE',
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : Text(
+                          'COLLECT BALANCE',
                           style: GoogleFonts.poppins(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600)),
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                 ),
             ],
           );
@@ -602,7 +724,12 @@ class _SuperFinancialsPageState extends State<SuperFinancialsPage>
     );
   }
 
-  Widget _detailItem(String label, String value, {bool isBold = false, Color? color}) {
+  Widget _detailItem(
+    String label,
+    String value, {
+    bool isBold = false,
+    Color? color,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
@@ -610,15 +737,23 @@ class _SuperFinancialsPageState extends State<SuperFinancialsPage>
         children: [
           SizedBox(
             width: 100,
-            child: Text('$label:', style: GoogleFonts.poppins(color: const Color(0xFF64748B), fontSize: 12)),
+            child: Text(
+              '$label:',
+              style: GoogleFonts.poppins(
+                color: const Color(0xFF64748B),
+                fontSize: 12,
+              ),
+            ),
           ),
           Expanded(
-            child: Text(value,
-                style: GoogleFonts.poppins(
-                  color: color ?? const Color(0xFF1E293B),
-                  fontSize: 13,
-                  fontWeight: isBold ? FontWeight.w700 : FontWeight.w500,
-                )),
+            child: Text(
+              value,
+              style: GoogleFonts.poppins(
+                color: color ?? const Color(0xFF1E293B),
+                fontSize: 13,
+                fontWeight: isBold ? FontWeight.w700 : FontWeight.w500,
+              ),
+            ),
           ),
         ],
       ),
@@ -632,16 +767,31 @@ class _SuperFinancialsPageState extends State<SuperFinancialsPage>
         color: color.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(20),
       ),
-      child: Text(label,
-          style: GoogleFonts.poppins(
-              color: color, fontSize: 11, fontWeight: FontWeight.w600)),
+      child: Text(
+        label,
+        style: GoogleFonts.poppins(
+          color: color,
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
     );
   }
 
   String _fmtDate(DateTime d) {
     final m = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
     return '${m[d.month - 1]} ${d.day}, ${d.year}';
   }

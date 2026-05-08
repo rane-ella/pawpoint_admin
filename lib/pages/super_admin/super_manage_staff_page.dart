@@ -33,7 +33,11 @@ class _SuperManageStaffPageState extends State<SuperManageStaffPage> {
     try {
       final data = await AdminApiService.fetchStaff();
       if (mounted) {
-        setState(() { _staff = data; _filtered = data; _loading = false; });
+        setState(() {
+          _staff = data;
+          _filtered = data;
+          _loading = false;
+        });
       }
     } catch (_) {
       if (mounted) setState(() => _loading = false);
@@ -46,9 +50,9 @@ class _SuperManageStaffPageState extends State<SuperManageStaffPage> {
       _filtered = q.isEmpty
           ? _staff
           : _staff.where((s) {
-              final name  = (s['name']  ?? '').toString().toLowerCase();
+              final name = (s['name'] ?? '').toString().toLowerCase();
               final email = (s['email'] ?? '').toString().toLowerCase();
-              final spec  = (s['specialty'] ?? '').toString().toLowerCase();
+              final spec = (s['specialty'] ?? '').toString().toLowerCase();
               return name.contains(q) || email.contains(q) || spec.contains(q);
             }).toList();
     });
@@ -56,9 +60,9 @@ class _SuperManageStaffPageState extends State<SuperManageStaffPage> {
 
   // ── Provision new doctor dialog ────────────────────────────────────────
   void _showAddStaffDialog() {
-    final nameCtrl     = TextEditingController();
-    final emailCtrl    = TextEditingController();
-    final passCtrl     = TextEditingController();
+    final nameCtrl = TextEditingController();
+    final emailCtrl = TextEditingController();
+    final passCtrl = TextEditingController();
     final specialtyCtrl = TextEditingController(text: 'Veterinarian');
     bool isSaving = false;
 
@@ -66,37 +70,59 @@ class _SuperManageStaffPageState extends State<SuperManageStaffPage> {
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setLocal) => AlertDialog(
-          backgroundColor: const Color(0xFF1E293B),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: Text('Add New Doctor',
-              style: GoogleFonts.poppins(
-                  color: Colors.white, fontWeight: FontWeight.w700)),
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Text(
+            'Add New Doctor',
+            style: GoogleFonts.poppins(
+              color: const Color(0xFF1E293B),
+              fontWeight: FontWeight.w700,
+            ),
+          ),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 _dialogField(nameCtrl, 'Full Name', Icons.person_rounded),
                 const SizedBox(height: 10),
-                _dialogField(emailCtrl, 'Email Address', Icons.email_rounded,
-                    type: TextInputType.emailAddress),
+                _dialogField(
+                  emailCtrl,
+                  'Email Address',
+                  Icons.email_rounded,
+                  type: TextInputType.emailAddress,
+                ),
                 const SizedBox(height: 10),
-                _dialogField(passCtrl, 'Temporary Password', Icons.lock_rounded,
-                    obscure: true),
+                _dialogField(
+                  passCtrl,
+                  'Password',
+                  Icons.lock_rounded,
+                  obscure: true,
+                ),
                 const SizedBox(height: 10),
-                _dialogField(specialtyCtrl, 'Specialty', Icons.medical_services_rounded),
+                _dialogField(
+                  specialtyCtrl,
+                  'Specialty',
+                  Icons.medical_services_rounded,
+                ),
               ],
             ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: Text('Cancel',
-                  style: GoogleFonts.poppins(color: const Color(0xFF94A3B8))),
+              child: Text(
+                'Cancel',
+                style: GoogleFonts.poppins(color: const Color(0xFF64748B)),
+              ),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF10B981),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
               onPressed: isSaving
                   ? null
@@ -115,7 +141,10 @@ class _SuperManageStaffPageState extends State<SuperManageStaffPage> {
                           specialty: specialtyCtrl.text.trim(),
                         );
                         if (ctx.mounted) Navigator.pop(ctx);
-                        _showSnack('Doctor account created ✓', const Color(0xFF10B981));
+                        _showSnack(
+                          'Doctor account created ✓',
+                          const Color(0xFF10B981),
+                        );
                         _load();
                       } catch (e) {
                         setLocal(() => isSaving = false);
@@ -124,11 +153,20 @@ class _SuperManageStaffPageState extends State<SuperManageStaffPage> {
                     },
               child: isSaving
                   ? const SizedBox(
-                      width: 18, height: 18,
-                      child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                  : Text('Create Account',
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2,
+                      ),
+                    )
+                  : Text(
+                      'Create Account',
                       style: GoogleFonts.poppins(
-                          color: Colors.white, fontWeight: FontWeight.w600)),
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
             ),
           ],
         ),
@@ -136,11 +174,16 @@ class _SuperManageStaffPageState extends State<SuperManageStaffPage> {
     );
   }
 
-  Widget _dialogField(TextEditingController ctrl, String hint, IconData icon,
-      {TextInputType type = TextInputType.text, bool obscure = false}) {
+  Widget _dialogField(
+    TextEditingController ctrl,
+    String hint,
+    IconData icon, {
+    TextInputType type = TextInputType.text,
+    bool obscure = false,
+  }) {
     return TextField(
       controller: ctrl,
-      style: const TextStyle(color: Colors.white),
+      style: const TextStyle(color: Color(0xFF1E293B)),
       obscureText: obscure,
       keyboardType: type,
       decoration: InputDecoration(
@@ -148,37 +191,47 @@ class _SuperManageStaffPageState extends State<SuperManageStaffPage> {
         hintStyle: const TextStyle(color: Color(0xFF64748B)),
         prefixIcon: Icon(icon, color: const Color(0xFF64748B), size: 18),
         filled: true,
-        fillColor: const Color(0xFF0F172A),
+        fillColor: const Color(0xFFF8FAFF),
         border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+        ),
         contentPadding: const EdgeInsets.symmetric(vertical: 14),
       ),
     );
   }
 
   void _showSnack(String msg, Color color) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(msg, style: GoogleFonts.poppins(color: Colors.white)),
-      backgroundColor: color,
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-    ));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(msg, style: GoogleFonts.poppins(color: Colors.white)),
+        backgroundColor: color,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+    );
   }
 
   // ── Build ──────────────────────────────────────────────────────────────
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xFF0F172A),
+      color: Colors.white,
       child: Column(
         children: [
           _buildToolbar(),
           Expanded(
             child: _loading
-                ? const Center(child: CircularProgressIndicator(color: Color(0xFF6366F1)))
+                ? const Center(
+                    child: CircularProgressIndicator(color: Color(0xFF10B981)),
+                  )
                 : _filtered.isEmpty
-                    ? _buildEmpty()
-                    : _buildList(),
+                ? _buildEmpty()
+                : _buildList(),
           ),
         ],
       ),
@@ -193,19 +246,26 @@ class _SuperManageStaffPageState extends State<SuperManageStaffPage> {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: const Color(0xFF1E293B),
+                color: const Color(0xFFF8FAFF),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFF334155)),
+                border: Border.all(color: const Color(0xFFE2E8F0)),
               ),
               child: TextField(
                 controller: _searchCtrl,
-                style: GoogleFonts.poppins(color: Colors.white, fontSize: 14),
+                style: GoogleFonts.poppins(
+                  color: const Color(0xFF1E293B),
+                  fontSize: 14,
+                ),
                 decoration: InputDecoration(
                   hintText: 'Search staff by name or specialty…',
-                  hintStyle:
-                      GoogleFonts.poppins(color: const Color(0xFF64748B), fontSize: 13),
-                  prefixIcon:
-                      const Icon(Icons.search_rounded, color: Color(0xFF64748B)),
+                  hintStyle: GoogleFonts.poppins(
+                    color: const Color(0xFF64748B),
+                    fontSize: 13,
+                  ),
+                  prefixIcon: const Icon(
+                    Icons.search_rounded,
+                    color: Color(0xFF64748B),
+                  ),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(vertical: 14),
                 ),
@@ -214,18 +274,26 @@ class _SuperManageStaffPageState extends State<SuperManageStaffPage> {
           ),
           const SizedBox(width: 10),
           IconButton(
-            icon: const Icon(Icons.refresh_rounded, color: Color(0xFF94A3B8)),
+            icon: const Icon(Icons.refresh_rounded, color: Color(0xFF64748B)),
             onPressed: _load,
           ),
           const SizedBox(width: 4),
           ElevatedButton.icon(
             onPressed: _showAddStaffDialog,
             icon: const Icon(Icons.add_rounded, size: 18),
-            label: Text('Add Doctor',
-                style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 13)),
+            label: Text(
+              'Add Doctor',
+              style: GoogleFonts.poppins(
+                fontWeight: FontWeight.w600,
+                fontSize: 13,
+                color: Colors.white,
+              ),
+            ),
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF10B981),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
               elevation: 0,
             ),
@@ -240,17 +308,27 @@ class _SuperManageStaffPageState extends State<SuperManageStaffPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.medical_services_outlined,
-              color: Color(0xFF334155), size: 56),
+          const Icon(
+            Icons.medical_services_outlined,
+            color: Color(0xFFE2E8F0),
+            size: 56,
+          ),
           const SizedBox(height: 16),
-          Text('No staff members found',
-              style: GoogleFonts.poppins(color: const Color(0xFF64748B), fontSize: 15)),
+          Text(
+            'No staff members found',
+            style: GoogleFonts.poppins(
+              color: const Color(0xFF64748B),
+              fontSize: 15,
+            ),
+          ),
           const SizedBox(height: 8),
           TextButton.icon(
             onPressed: _showAddStaffDialog,
             icon: const Icon(Icons.add_rounded, color: Color(0xFF10B981)),
-            label: Text('Add the first doctor',
-                style: GoogleFonts.poppins(color: const Color(0xFF10B981))),
+            label: Text(
+              'Add the first doctor',
+              style: GoogleFonts.poppins(color: Color(0xFF10B981)),
+            ),
           ),
         ],
       ),
@@ -270,32 +348,37 @@ class _SuperManageStaffPageState extends State<SuperManageStaffPage> {
     final specialty = s['specialty'] ?? 'Veterinarian';
     final isNurse = (s['role'] ?? '') == 'super_admin';
     final roleLabel = isNurse ? 'Super Admin / Nurse' : 'Staff Admin / Doctor';
-    final roleColor = isNurse ? const Color(0xFF8B5CF6) : const Color(0xFF10B981);
+    final roleColor = isNurse
+        ? const Color(0xFF8B5CF6)
+        : const Color(0xFF10B981);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E293B),
+        color: const Color(0xFFF8FAFF),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFF334155)),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
       ),
       child: Row(
         children: [
           // Avatar
           CircleAvatar(
             radius: 28,
-            backgroundColor: roleColor.withValues(alpha: 0.15),
-            backgroundImage: s['photoUrl'] != null &&
-                    (s['photoUrl'] as String).isNotEmpty
+            backgroundColor: roleColor.withValues(alpha: 0.1),
+            backgroundImage:
+                s['photoUrl'] != null && (s['photoUrl'] as String).isNotEmpty
                 ? NetworkImage(s['photoUrl'])
                 : null,
             child: s['photoUrl'] == null || (s['photoUrl'] as String).isEmpty
-                ? Text(initials,
+                ? Text(
+                    initials,
                     style: GoogleFonts.poppins(
-                        color: roleColor,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 15))
+                      color: roleColor,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 15,
+                    ),
+                  )
                 : null,
           ),
           const SizedBox(width: 14),
@@ -303,29 +386,43 @@ class _SuperManageStaffPageState extends State<SuperManageStaffPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(s['name'] ?? 'Unknown',
-                    style: GoogleFonts.poppins(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis),
+                Text(
+                  s['name'] ?? 'Unknown',
+                  style: GoogleFonts.poppins(
+                    color: const Color(0xFF1E293B),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
                 const SizedBox(height: 2),
-                Text(specialty,
-                    style: GoogleFonts.poppins(
-                        color: const Color(0xFF94A3B8), fontSize: 12)),
+                Text(
+                  specialty,
+                  style: GoogleFonts.poppins(
+                    color: const Color(0xFF64748B),
+                    fontSize: 12,
+                  ),
+                ),
                 const SizedBox(height: 4),
                 Row(
                   children: [
-                    const Icon(Icons.email_outlined,
-                        color: Color(0xFF64748B), size: 12),
+                    const Icon(
+                      Icons.email_outlined,
+                      color: Color(0xFF94A3B8),
+                      size: 12,
+                    ),
                     const SizedBox(width: 4),
                     Expanded(
-                      child: Text(s['email'] ?? '-',
-                          style: GoogleFonts.poppins(
-                              color: const Color(0xFF64748B), fontSize: 11),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis),
+                      child: Text(
+                        s['email'] ?? '-',
+                        style: GoogleFonts.poppins(
+                          color: const Color(0xFF94A3B8),
+                          fontSize: 11,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ],
                 ),
@@ -336,12 +433,17 @@ class _SuperManageStaffPageState extends State<SuperManageStaffPage> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
-              color: roleColor.withValues(alpha: 0.12),
+              color: roleColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Text(roleLabel,
-                style: GoogleFonts.poppins(
-                    color: roleColor, fontSize: 10, fontWeight: FontWeight.w600)),
+            child: Text(
+              roleLabel,
+              style: GoogleFonts.poppins(
+                color: roleColor,
+                fontSize: 10,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
         ],
       ),

@@ -10,12 +10,48 @@ class SuperNotificationsPage extends StatefulWidget {
 
 class _SuperNotificationsPageState extends State<SuperNotificationsPage> {
   final List<_Notif> _notifs = [
-    _Notif('New Appointment Booked', 'Fluffy · Grooming — Mon, Apr 7, 10:00 AM', Icons.calendar_today_rounded, const Color(0xFF6366F1), false),
-    _Notif('Appointment Approved', 'Buddy · Check-up by Dr. Santos', Icons.check_circle_rounded, const Color(0xFF10B981), false),
-    _Notif('New User Registered', 'Maria Santos created an account', Icons.person_add_rounded, const Color(0xFF3B82F6), true),
-    _Notif('Appointment Rejected', 'Max · Vaccination — rescheduled', Icons.cancel_rounded, const Color(0xFFEF4444), true),
-    _Notif('Doctor Sent a Message', 'Dr. Reyes: Please check the schedule', Icons.chat_bubble_rounded, const Color(0xFF8B5CF6), false),
-    _Notif('Appointment Completed', 'Mochi · Dental — completed successfully', Icons.task_alt_rounded, const Color(0xFFF59E0B), true),
+    _Notif(
+      'New Appointment Booked',
+      'Fluffy · Grooming — Mon, Apr 7, 10:00 AM',
+      Icons.calendar_today_rounded,
+      const Color(0xFF6366F1),
+      false,
+    ),
+    _Notif(
+      'Appointment Approved',
+      'Buddy · Check-up by Dr. Santos',
+      Icons.check_circle_rounded,
+      const Color(0xFF10B981),
+      false,
+    ),
+    _Notif(
+      'New User Registered',
+      'Maria Santos created an account',
+      Icons.person_add_rounded,
+      const Color(0xFF3B82F6),
+      true,
+    ),
+    _Notif(
+      'Appointment Rejected',
+      'Max · Vaccination — rescheduled',
+      Icons.cancel_rounded,
+      const Color(0xFFEF4444),
+      true,
+    ),
+    _Notif(
+      'Doctor Sent a Message',
+      'Dr. Reyes: Please check the schedule',
+      Icons.chat_bubble_rounded,
+      const Color(0xFF8B5CF6),
+      false,
+    ),
+    _Notif(
+      'Appointment Completed',
+      'Mochi · Dental — completed successfully',
+      Icons.task_alt_rounded,
+      const Color(0xFFF59E0B),
+      true,
+    ),
   ];
 
   String _filter = 'all';
@@ -25,8 +61,8 @@ class _SuperNotificationsPageState extends State<SuperNotificationsPage> {
     final visible = _filter == 'unread'
         ? _notifs.where((n) => !n.read).toList()
         : _filter == 'read'
-            ? _notifs.where((n) => n.read).toList()
-            : _notifs;
+        ? _notifs.where((n) => n.read).toList()
+        : _notifs;
 
     return Container(
       color: Colors.white,
@@ -36,14 +72,28 @@ class _SuperNotificationsPageState extends State<SuperNotificationsPage> {
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
             child: Row(
               children: [
-                Text('${_notifs.where((n) => !n.read).length} unread',
-                    style: GoogleFonts.poppins(color: const Color(0xFF10B981), fontSize: 13, fontWeight: FontWeight.w600)),
+                Text(
+                  '${_notifs.where((n) => !n.read).length} unread',
+                  style: GoogleFonts.poppins(
+                    color: const Color(0xFF10B981),
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
                 const Spacer(),
                 TextButton(
-                  onPressed: () => setState(() { for (var n in _notifs) {
-                    n.read = true;
-                  } }),
-                  child: Text('Mark all read', style: GoogleFonts.poppins(color: const Color(0xFF94A3B8), fontSize: 12)),
+                  onPressed: () => setState(() {
+                    for (var n in _notifs) {
+                      n.read = true;
+                    }
+                  }),
+                  child: Text(
+                    'Mark all read',
+                    style: GoogleFonts.poppins(
+                      color: const Color(0xFF94A3B8),
+                      fontSize: 12,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -60,20 +110,29 @@ class _SuperNotificationsPageState extends State<SuperNotificationsPage> {
                     onTap: () => setState(() => _filter = f),
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 6,
+                      ),
                       decoration: BoxDecoration(
-                        color: sel ? const Color(0xFF10B981) : const Color(0xFFF8FAFF),
+                        color: sel
+                            ? const Color(0xFF10B981)
+                            : const Color(0xFFF8FAFF),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                          color: sel ? const Color(0xFF10B981) : const Color(0xFFE2E8F0),
+                          color: sel
+                              ? const Color(0xFF10B981)
+                              : const Color(0xFFE2E8F0),
                         ),
                       ),
-                      child: Text(f[0].toUpperCase() + f.substring(1),
-                          style: GoogleFonts.poppins(
-                            color: sel ? Colors.white : const Color(0xFF64748B),
-                            fontSize: 12,
-                            fontWeight: sel ? FontWeight.w600 : FontWeight.w400,
-                          )),
+                      child: Text(
+                        f[0].toUpperCase() + f.substring(1),
+                        style: GoogleFonts.poppins(
+                          color: sel ? Colors.white : const Color(0xFF64748B),
+                          fontSize: 12,
+                          fontWeight: sel ? FontWeight.w600 : FontWeight.w400,
+                        ),
+                      ),
                     ),
                   ),
                 );
@@ -84,8 +143,13 @@ class _SuperNotificationsPageState extends State<SuperNotificationsPage> {
           Expanded(
             child: visible.isEmpty
                 ? Center(
-                    child: Text('No notifications',
-                        style: GoogleFonts.poppins(color: const Color(0xFF64748B))))
+                    child: Text(
+                      'No notifications',
+                      style: GoogleFonts.poppins(
+                        color: const Color(0xFF64748B),
+                      ),
+                    ),
+                  )
                 : ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     itemCount: visible.length,
@@ -108,15 +172,19 @@ class _SuperNotificationsPageState extends State<SuperNotificationsPage> {
           color: n.read ? const Color(0xFFF8FAFF) : Colors.white,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: n.read ? const Color(0xFFE2E8F0) : n.color.withValues(alpha: 0.3),
+            color: n.read
+                ? const Color(0xFFE2E8F0)
+                : n.color.withValues(alpha: 0.3),
           ),
-          boxShadow: n.read ? [] : [
-            BoxShadow(
-              color: n.color.withValues(alpha: 0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            )
-          ],
+          boxShadow: n.read
+              ? []
+              : [
+                  BoxShadow(
+                    color: n.color.withValues(alpha: 0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
         ),
         child: Row(
           children: [
@@ -133,15 +201,22 @@ class _SuperNotificationsPageState extends State<SuperNotificationsPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(n.title,
-                      style: GoogleFonts.poppins(
-                        color: const Color(0xFF1E293B),
-                        fontWeight: n.read ? FontWeight.w400 : FontWeight.w600,
-                        fontSize: 13,
-                      )),
+                  Text(
+                    n.title,
+                    style: GoogleFonts.poppins(
+                      color: const Color(0xFF1E293B),
+                      fontWeight: n.read ? FontWeight.w400 : FontWeight.w600,
+                      fontSize: 13,
+                    ),
+                  ),
                   const SizedBox(height: 2),
-                  Text(n.body,
-                      style: GoogleFonts.poppins(color: const Color(0xFF64748B), fontSize: 11)),
+                  Text(
+                    n.body,
+                    style: GoogleFonts.poppins(
+                      color: const Color(0xFF64748B),
+                      fontSize: 11,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -149,7 +224,10 @@ class _SuperNotificationsPageState extends State<SuperNotificationsPage> {
               Container(
                 width: 8,
                 height: 8,
-                decoration: BoxDecoration(color: n.color, shape: BoxShape.circle),
+                decoration: BoxDecoration(
+                  color: n.color,
+                  shape: BoxShape.circle,
+                ),
               ),
           ],
         ),

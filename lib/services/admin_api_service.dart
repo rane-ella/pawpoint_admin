@@ -11,7 +11,10 @@ class AdminApiService {
   static const String _base = AdminApiConfig.baseUrl;
 
   /// Uploads a profile image to Firebase Storage and returns the download URL.
-  static Future<String> uploadProfileImage(Uint8List fileBytes, String email) async {
+  static Future<String> uploadProfileImage(
+    Uint8List fileBytes,
+    String email,
+  ) async {
     try {
       debugPrint('[AdminApiService] Starting image upload for $email...');
       final storageRef = FirebaseStorage.instance
@@ -20,11 +23,10 @@ class AdminApiService {
           .child('${email}_${DateTime.now().millisecondsSinceEpoch}.jpg');
 
       // Use putData with a timeout
-      final uploadTask = await storageRef.putData(
-        fileBytes,
-        SettableMetadata(contentType: 'image/jpeg'),
-      ).timeout(const Duration(seconds: 30));
-      
+      final uploadTask = await storageRef
+          .putData(fileBytes, SettableMetadata(contentType: 'image/jpeg'))
+          .timeout(const Duration(seconds: 30));
+
       final url = await uploadTask.ref.getDownloadURL();
       debugPrint('[AdminApiService] Image upload success: $url');
       return url;
@@ -36,7 +38,8 @@ class AdminApiService {
 
   // ─────────────────────────── Dashboard Stats ──────────────────────────────
   static Future<Map<String, dynamic>> fetchStats() async {
-    final res = await http.get(Uri.parse('$_base/api/admin/stats'))
+    final res = await http
+        .get(Uri.parse('$_base/api/admin/stats'))
         .timeout(const Duration(seconds: 30));
     if (res.statusCode == 200) return jsonDecode(res.body);
     throw Exception('Failed to load stats: ${res.body}');
@@ -44,7 +47,8 @@ class AdminApiService {
 
   // ─────────────────────────── Users ───────────────────────────────────────
   static Future<List<dynamic>> fetchAllUsers() async {
-    final res = await http.get(Uri.parse('$_base/api/admin/users'))
+    final res = await http
+        .get(Uri.parse('$_base/api/admin/users'))
         .timeout(const Duration(seconds: 30));
     if (res.statusCode == 200) return jsonDecode(res.body)['users'];
     throw Exception('Failed to load users');
@@ -52,7 +56,8 @@ class AdminApiService {
 
   /// Fetch all pets for a specific user.
   static Future<List<dynamic>> fetchUserPets(String userId) async {
-    final res = await http.get(Uri.parse('$_base/api/admin/users/$userId/pets'))
+    final res = await http
+        .get(Uri.parse('$_base/api/admin/users/$userId/pets'))
         .timeout(const Duration(seconds: 30));
     if (res.statusCode == 200) return jsonDecode(res.body)['pets'];
     throw Exception('Failed to load user pets');
@@ -60,8 +65,8 @@ class AdminApiService {
 
   // ─────────────────────────── Pending Appointments ────────────────────────
   static Future<List<dynamic>> fetchPendingAppointments() async {
-    final res = await http.get(
-        Uri.parse('$_base/api/admin/appointments/pending'))
+    final res = await http
+        .get(Uri.parse('$_base/api/admin/appointments/pending'))
         .timeout(const Duration(seconds: 30));
     if (res.statusCode == 200) {
       return jsonDecode(res.body)['appointments'];
@@ -71,8 +76,8 @@ class AdminApiService {
 
   // ─────────────────────────── Approved/All Appointments ───────────────────
   static Future<List<dynamic>> fetchApprovedAppointments() async {
-    final res = await http.get(
-        Uri.parse('$_base/api/admin/appointments/approved'))
+    final res = await http
+        .get(Uri.parse('$_base/api/admin/appointments/approved'))
         .timeout(const Duration(seconds: 30));
     if (res.statusCode == 200) {
       return jsonDecode(res.body)['appointments'];
@@ -82,8 +87,8 @@ class AdminApiService {
 
   // ─────────────────────────── Completed Appointments ──────────────────────
   static Future<List<dynamic>> fetchCompletedAppointments() async {
-    final res = await http.get(
-        Uri.parse('$_base/api/admin/appointments/completed'))
+    final res = await http
+        .get(Uri.parse('$_base/api/admin/appointments/completed'))
         .timeout(const Duration(seconds: 30));
     if (res.statusCode == 200) {
       return jsonDecode(res.body)['appointments'];
@@ -93,8 +98,8 @@ class AdminApiService {
 
   // ─────────────────────────── Rejected Appointments ───────────────────────
   static Future<List<dynamic>> fetchRejectedAppointments() async {
-    final res = await http.get(
-        Uri.parse('$_base/api/admin/appointments/rejected'))
+    final res = await http
+        .get(Uri.parse('$_base/api/admin/appointments/rejected'))
         .timeout(const Duration(seconds: 30));
     if (res.statusCode == 200) {
       return jsonDecode(res.body)['appointments'];
@@ -109,16 +114,19 @@ class AdminApiService {
     String doctorNote = '',
     String assignedDoctor = '',
   }) async {
-    final res = await http.put(
-      Uri.parse(
-          '$_base/api/admin/appointments/$userId/$appointmentId/approve'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'status': 'approved',
-        'doctor_note': doctorNote,
-        'assigned_doctor': assignedDoctor,
-      }),
-    ).timeout(const Duration(seconds: 30));
+    final res = await http
+        .put(
+          Uri.parse(
+            '$_base/api/admin/appointments/$userId/$appointmentId/approve',
+          ),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'status': 'approved',
+            'doctor_note': doctorNote,
+            'assigned_doctor': assignedDoctor,
+          }),
+        )
+        .timeout(const Duration(seconds: 30));
     if (res.statusCode != 200) throw Exception('Failed to approve');
   }
 
@@ -128,12 +136,15 @@ class AdminApiService {
     String appointmentId, {
     String doctorNote = '',
   }) async {
-    final res = await http.put(
-      Uri.parse(
-          '$_base/api/admin/appointments/$userId/$appointmentId/reject'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'status': 'rejected', 'doctor_note': doctorNote}),
-    ).timeout(const Duration(seconds: 30));
+    final res = await http
+        .put(
+          Uri.parse(
+            '$_base/api/admin/appointments/$userId/$appointmentId/reject',
+          ),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({'status': 'rejected', 'doctor_note': doctorNote}),
+        )
+        .timeout(const Duration(seconds: 30));
     if (res.statusCode != 200) throw Exception('Failed to reject');
   }
 
@@ -143,12 +154,15 @@ class AdminApiService {
     String appointmentId, {
     String reason = '',
   }) async {
-    final res = await http.put(
-      Uri.parse(
-          '$_base/api/admin/appointments/$userId/$appointmentId/cancel'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'status': 'cancelled', 'doctor_note': reason}),
-    ).timeout(const Duration(seconds: 30));
+    final res = await http
+        .put(
+          Uri.parse(
+            '$_base/api/admin/appointments/$userId/$appointmentId/cancel',
+          ),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({'status': 'cancelled', 'doctor_note': reason}),
+        )
+        .timeout(const Duration(seconds: 30));
     if (res.statusCode != 200) {
       final detail = jsonDecode(res.body)['detail'] ?? 'Failed to cancel';
       throw Exception(detail);
@@ -162,15 +176,18 @@ class AdminApiService {
     required String proposedDatetime,
     String assignedDoctor = '',
   }) async {
-    final res = await http.put(
-      Uri.parse(
-          '$_base/api/admin/appointments/$userId/$appointmentId/propose-reschedule'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'proposed_datetime': proposedDatetime,
-        'assigned_doctor': assignedDoctor,
-      }),
-    ).timeout(const Duration(seconds: 30));
+    final res = await http
+        .put(
+          Uri.parse(
+            '$_base/api/admin/appointments/$userId/$appointmentId/propose-reschedule',
+          ),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'proposed_datetime': proposedDatetime,
+            'assigned_doctor': assignedDoctor,
+          }),
+        )
+        .timeout(const Duration(seconds: 30));
     if (res.statusCode != 200) {
       final detail =
           jsonDecode(res.body)['detail'] ?? 'Failed to propose reschedule';
@@ -180,12 +197,17 @@ class AdminApiService {
 
   // ─────────────────────────── Complete ────────────────────────────────────
   static Future<void> completeAppointment(
-      String userId, String appointmentId) async {
-    final res = await http.put(
-      Uri.parse(
-          '$_base/api/admin/appointments/$userId/$appointmentId/complete'),
-      headers: {'Content-Type': 'application/json'},
-    ).timeout(const Duration(seconds: 30));
+    String userId,
+    String appointmentId,
+  ) async {
+    final res = await http
+        .put(
+          Uri.parse(
+            '$_base/api/admin/appointments/$userId/$appointmentId/complete',
+          ),
+          headers: {'Content-Type': 'application/json'},
+        )
+        .timeout(const Duration(seconds: 30));
     if (res.statusCode != 200) throw Exception('Failed to complete');
   }
 
@@ -193,8 +215,8 @@ class AdminApiService {
 
   /// List all admin accounts (from the 'admins' Firestore collection).
   static Future<List<dynamic>> fetchStaff() async {
-    final res =
-        await http.get(Uri.parse('$_base/api/admin/staff'))
+    final res = await http
+        .get(Uri.parse('$_base/api/admin/staff'))
         .timeout(const Duration(seconds: 30));
     if (res.statusCode == 200) return jsonDecode(res.body)['staff'];
     throw Exception('Failed to load staff');
@@ -210,22 +232,24 @@ class AdminApiService {
     String bio = '',
     String photoUrl = '',
   }) async {
-    final res = await http.post(
-      Uri.parse('$_base/api/admin/staff'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'name': name,
-        'email': email,
-        'password': password,
-        'specialty': specialty,
-        'role': 'staff_admin',
-        'phone': phone,
-        'bio': bio,
-        'photoUrl': photoUrl,
-        'isActive': false,
-      }),
-    ).timeout(const Duration(seconds: 60)); // Long timeout for creation
-    
+    final res = await http
+        .post(
+          Uri.parse('$_base/api/admin/staff'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'name': name,
+            'email': email,
+            'password': password,
+            'specialty': specialty,
+            'role': 'staff_admin',
+            'phone': phone,
+            'bio': bio,
+            'photoUrl': photoUrl,
+            'isActive': false,
+          }),
+        )
+        .timeout(const Duration(seconds: 60)); // Long timeout for creation
+
     if (res.statusCode != 200 && res.statusCode != 201) {
       final detail =
           jsonDecode(res.body)['detail'] ?? 'Failed to create staff account';
@@ -235,10 +259,12 @@ class AdminApiService {
 
   /// Mark a staff member as active (usually on first login).
   static Future<void> markStaffActive(String uid) async {
-    final res = await http.put(
-      Uri.parse('$_base/api/admin/staff/$uid/activate'),
-      headers: {'Content-Type': 'application/json'},
-    ).timeout(const Duration(seconds: 30));
+    final res = await http
+        .put(
+          Uri.parse('$_base/api/admin/staff/$uid/activate'),
+          headers: {'Content-Type': 'application/json'},
+        )
+        .timeout(const Duration(seconds: 30));
     if (res.statusCode != 200) {
       throw Exception('Failed to activate staff account');
     }
@@ -246,10 +272,12 @@ class AdminApiService {
 
   /// Mark a staff member as deactivated (fired/resigned).
   static Future<void> deactivateStaff(String uid) async {
-    final res = await http.put(
-      Uri.parse('$_base/api/admin/staff/$uid/deactivate'),
-      headers: {'Content-Type': 'application/json'},
-    ).timeout(const Duration(seconds: 30));
+    final res = await http
+        .put(
+          Uri.parse('$_base/api/admin/staff/$uid/deactivate'),
+          headers: {'Content-Type': 'application/json'},
+        )
+        .timeout(const Duration(seconds: 30));
     if (res.statusCode != 200) {
       throw Exception('Failed to deactivate staff account');
     }
@@ -259,8 +287,8 @@ class AdminApiService {
 
   /// Fetch all clinic services.
   static Future<List<dynamic>> fetchServices() async {
-    final res =
-        await http.get(Uri.parse('$_base/api/admin/services'))
+    final res = await http
+        .get(Uri.parse('$_base/api/admin/services'))
         .timeout(const Duration(seconds: 30));
     if (res.statusCode == 200) return jsonDecode(res.body)['services'];
     throw Exception('Failed to load services');
@@ -272,12 +300,17 @@ class AdminApiService {
     required double price,
     String description = '',
   }) async {
-    final res = await http.post(
-      Uri.parse('$_base/api/admin/services'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(
-          {'name': name, 'price': price, 'description': description}),
-    ).timeout(const Duration(seconds: 30));
+    final res = await http
+        .post(
+          Uri.parse('$_base/api/admin/services'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'name': name,
+            'price': price,
+            'description': description,
+          }),
+        )
+        .timeout(const Duration(seconds: 30));
     if (res.statusCode != 200 && res.statusCode != 201) {
       throw Exception('Failed to create service');
     }
@@ -290,19 +323,24 @@ class AdminApiService {
     required double price,
     String description = '',
   }) async {
-    final res = await http.put(
-      Uri.parse('$_base/api/admin/services/$id'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(
-          {'name': name, 'price': price, 'description': description}),
-    ).timeout(const Duration(seconds: 30));
+    final res = await http
+        .put(
+          Uri.parse('$_base/api/admin/services/$id'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'name': name,
+            'price': price,
+            'description': description,
+          }),
+        )
+        .timeout(const Duration(seconds: 30));
     if (res.statusCode != 200) throw Exception('Failed to update service');
   }
 
   /// Delete a service.
   static Future<void> deleteService(String id) async {
-    final res =
-        await http.delete(Uri.parse('$_base/api/admin/services/$id'))
+    final res = await http
+        .delete(Uri.parse('$_base/api/admin/services/$id'))
         .timeout(const Duration(seconds: 30));
     if (res.statusCode != 200) throw Exception('Failed to delete service');
   }
@@ -316,23 +354,25 @@ class AdminApiService {
     String receiverName = '',
     String senderRole = 'staff_admin',
   }) async {
-    await http.post(
-      Uri.parse('$_base/api/admin/messages'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'sender_id': senderId,
-        'receiver_id': receiverId,
-        'content': content,
-        'sender_name': senderName,
-        'receiver_name': receiverName,
-        'sender_role': senderRole,
-      }),
-    ).timeout(const Duration(seconds: 15));
+    await http
+        .post(
+          Uri.parse('$_base/api/admin/messages'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'sender_id': senderId,
+            'receiver_id': receiverId,
+            'content': content,
+            'sender_name': senderName,
+            'receiver_name': receiverName,
+            'sender_role': senderRole,
+          }),
+        )
+        .timeout(const Duration(seconds: 15));
   }
 
   static Future<List<dynamic>> fetchConversations(String uid) async {
-    final res =
-        await http.get(Uri.parse('$_base/api/admin/messages/$uid'))
+    final res = await http
+        .get(Uri.parse('$_base/api/admin/messages/$uid'))
         .timeout(const Duration(seconds: 30));
     if (res.statusCode == 200) {
       return jsonDecode(res.body)['conversations'];
@@ -341,8 +381,8 @@ class AdminApiService {
   }
 
   static Future<List<dynamic>> fetchAllConversations() async {
-    final res =
-        await http.get(Uri.parse('$_base/api/admin/messages'))
+    final res = await http
+        .get(Uri.parse('$_base/api/admin/messages'))
         .timeout(const Duration(seconds: 30));
     if (res.statusCode == 200) {
       return jsonDecode(res.body)['conversations'];
@@ -354,7 +394,8 @@ class AdminApiService {
 
   /// Fetch gross revenue, cash collected, pending receivables & per-service breakdown.
   static Future<Map<String, dynamic>> fetchFinancials() async {
-    final res = await http.get(Uri.parse('$_base/api/admin/financials'))
+    final res = await http
+        .get(Uri.parse('$_base/api/admin/financials'))
         .timeout(const Duration(seconds: 30));
     if (res.statusCode == 200) return jsonDecode(res.body);
     throw Exception('Failed to load financials');
@@ -362,7 +403,8 @@ class AdminApiService {
 
   /// Fetch the full transaction ledger.
   static Future<List<dynamic>> fetchTransactions() async {
-    final res = await http.get(Uri.parse('$_base/api/admin/transactions'))
+    final res = await http
+        .get(Uri.parse('$_base/api/admin/transactions'))
         .timeout(const Duration(seconds: 30));
     if (res.statusCode == 200) return jsonDecode(res.body)['transactions'];
     throw Exception('Failed to load transactions');
@@ -373,16 +415,19 @@ class AdminApiService {
     required String userId,
     required String appointmentId,
   }) async {
-    final res = await http.put(
-      Uri.parse('$_base/api/payments/mark-paid'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'user_id': userId,
-        'appointment_id': appointmentId,
-      }),
-    ).timeout(const Duration(seconds: 30));
+    final res = await http
+        .put(
+          Uri.parse('$_base/api/payments/mark-paid'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'user_id': userId,
+            'appointment_id': appointmentId,
+          }),
+        )
+        .timeout(const Duration(seconds: 30));
     if (res.statusCode != 200) {
-      final detail = jsonDecode(res.body)['detail'] ?? 'Failed to mark balance paid';
+      final detail =
+          jsonDecode(res.body)['detail'] ?? 'Failed to mark balance paid';
       throw Exception(detail);
     }
   }

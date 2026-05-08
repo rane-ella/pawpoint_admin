@@ -66,10 +66,12 @@ class _SuperUsersPageState extends State<SuperUsersPage> {
           _buildSearchBar(),
           Expanded(
             child: _loading
-                ? const Center(child: CircularProgressIndicator(color: Color(0xFF10B981)))
+                ? const Center(
+                    child: CircularProgressIndicator(color: Color(0xFF10B981)),
+                  )
                 : _filtered.isEmpty
-                    ? _buildEmpty()
-                    : _buildGrid(),
+                ? _buildEmpty()
+                : _buildGrid(),
           ),
         ],
       ),
@@ -90,11 +92,20 @@ class _SuperUsersPageState extends State<SuperUsersPage> {
               ),
               child: TextField(
                 controller: _searchCtrl,
-                style: GoogleFonts.poppins(color: const Color(0xFF1E293B), fontSize: 14),
+                style: GoogleFonts.poppins(
+                  color: const Color(0xFF1E293B),
+                  fontSize: 14,
+                ),
                 decoration: InputDecoration(
                   hintText: 'Search users...',
-                  hintStyle: GoogleFonts.poppins(color: const Color(0xFF94A3B8), fontSize: 14),
-                  prefixIcon: const Icon(Icons.search_rounded, color: Color(0xFF94A3B8)),
+                  hintStyle: GoogleFonts.poppins(
+                    color: const Color(0xFF94A3B8),
+                    fontSize: 14,
+                  ),
+                  prefixIcon: const Icon(
+                    Icons.search_rounded,
+                    color: Color(0xFF94A3B8),
+                  ),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(vertical: 14),
                 ),
@@ -113,8 +124,13 @@ class _SuperUsersPageState extends State<SuperUsersPage> {
 
   Widget _buildEmpty() {
     return Center(
-      child: Text('No users found',
-          style: GoogleFonts.poppins(color: const Color(0xFF64748B), fontSize: 15)),
+      child: Text(
+        'No users found',
+        style: GoogleFonts.poppins(
+          color: const Color(0xFF64748B),
+          fontSize: 15,
+        ),
+      ),
     );
   }
 
@@ -137,8 +153,8 @@ class _SuperUsersPageState extends State<SuperUsersPage> {
     final roleColor = role == 'super_admin'
         ? const Color(0xFF8B5CF6)
         : role == 'staff_admin'
-            ? const Color(0xFF10B981)
-            : const Color(0xFF3B82F6);
+        ? const Color(0xFF10B981)
+        : const Color(0xFF3B82F6);
     final initials = _initials(user['name'] ?? 'U');
 
     return Container(
@@ -156,13 +172,22 @@ class _SuperUsersPageState extends State<SuperUsersPage> {
               CircleAvatar(
                 radius: 22,
                 backgroundColor: roleColor.withValues(alpha: 0.1),
-                backgroundImage: user['photoUrl'] != null && (user['photoUrl'] as String).isNotEmpty
+                backgroundImage:
+                    user['photoUrl'] != null &&
+                        (user['photoUrl'] as String).isNotEmpty
                     ? NetworkImage(user['photoUrl'])
                     : null,
-                child: user['photoUrl'] == null || (user['photoUrl'] as String).isEmpty
-                    ? Text(initials,
+                child:
+                    user['photoUrl'] == null ||
+                        (user['photoUrl'] as String).isEmpty
+                    ? Text(
+                        initials,
                         style: GoogleFonts.poppins(
-                            color: roleColor, fontWeight: FontWeight.w700, fontSize: 14))
+                          color: roleColor,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                        ),
+                      )
                     : null,
               ),
               const SizedBox(width: 10),
@@ -170,19 +195,33 @@ class _SuperUsersPageState extends State<SuperUsersPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(user['name'] ?? 'Unknown',
-                        style: GoogleFonts.poppins(
-                            color: const Color(0xFF1E293B), fontWeight: FontWeight.w600, fontSize: 13),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis),
+                    Text(
+                      user['name'] ?? 'Unknown',
+                      style: GoogleFonts.poppins(
+                        color: const Color(0xFF1E293B),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: roleColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: Text(role,
-                          style: GoogleFonts.poppins(color: roleColor, fontSize: 9, fontWeight: FontWeight.w600)),
+                      child: Text(
+                        role,
+                        style: GoogleFonts.poppins(
+                          color: roleColor,
+                          fontSize: 9,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -197,14 +236,25 @@ class _SuperUsersPageState extends State<SuperUsersPage> {
           SizedBox(
             width: double.infinity,
             child: TextButton.icon(
-              onPressed: () => _showUserPets(user['id'], user['name'] ?? 'User'),
+              onPressed: () =>
+                  _showUserPets(user['id'], user['name'] ?? 'User'),
               icon: const Icon(Icons.pets_rounded, size: 14),
-              label: Text('View Pets', style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.w600)),
+              label: Text(
+                'View Pets',
+                style: GoogleFonts.poppins(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
               style: TextButton.styleFrom(
                 foregroundColor: const Color(0xFF10B981),
                 padding: const EdgeInsets.symmetric(vertical: 8),
-                backgroundColor: const Color(0xFF10B981).withValues(alpha: 0.05),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                backgroundColor: const Color(
+                  0xFF10B981,
+                ).withValues(alpha: 0.05),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
@@ -218,13 +268,21 @@ class _SuperUsersPageState extends State<SuperUsersPage> {
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setLocal) => AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: Text("$userName's Pets", style: GoogleFonts.poppins(fontWeight: FontWeight.bold)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Text(
+            "$userName's Pets",
+            style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+          ),
           content: FutureBuilder<List<dynamic>>(
             future: AdminApiService.fetchUserPets(userId),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const SizedBox(height: 100, child: Center(child: CircularProgressIndicator()));
+                return const SizedBox(
+                  height: 100,
+                  child: Center(child: CircularProgressIndicator()),
+                );
               }
               if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
@@ -242,40 +300,58 @@ class _SuperUsersPageState extends State<SuperUsersPage> {
                     final p = pets[index];
                     return ListTile(
                       leading: CircleAvatar(
-                        backgroundColor: (p['isDeceased'] ?? false) 
-                          ? Colors.grey.withValues(alpha: 0.1) 
-                          : const Color(0xFF10B981).withValues(alpha: 0.1),
+                        backgroundColor: (p['isDeceased'] ?? false)
+                            ? Colors.grey.withValues(alpha: 0.1)
+                            : const Color(0xFF10B981).withValues(alpha: 0.1),
                         child: Icon(
-                          Icons.pets_rounded, 
-                          color: (p['isDeceased'] ?? false) ? Colors.grey : const Color(0xFF10B981), 
-                          size: 18
+                          Icons.pets_rounded,
+                          color: (p['isDeceased'] ?? false)
+                              ? Colors.grey
+                              : const Color(0xFF10B981),
+                          size: 18,
                         ),
                       ),
                       title: Row(
                         children: [
-                          Text(p['name'] ?? 'Unnamed Pet', 
-                              style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w600,
-                                decoration: (p['isDeceased'] ?? false) ? TextDecoration.lineThrough : null,
-                                color: (p['isDeceased'] ?? false) ? Colors.grey : Colors.black87,
-                              )),
+                          Text(
+                            p['name'] ?? 'Unnamed Pet',
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w600,
+                              decoration: (p['isDeceased'] ?? false)
+                                  ? TextDecoration.lineThrough
+                                  : null,
+                              color: (p['isDeceased'] ?? false)
+                                  ? Colors.grey
+                                  : Colors.black87,
+                            ),
+                          ),
                           if (p['isDeceased'] ?? false)
                             Padding(
                               padding: const EdgeInsets.only(left: 8),
                               child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 2,
+                                ),
                                 decoration: BoxDecoration(
                                   color: Colors.red.withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(4),
                                 ),
-                                child: Text('DECEASED', style: GoogleFonts.poppins(color: Colors.red, fontSize: 8, fontWeight: FontWeight.bold)),
+                                child: Text(
+                                  'DECEASED',
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.red,
+                                    fontSize: 8,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
                             ),
                         ],
                       ),
                       subtitle: Text(
-                        "${p['petType'] ?? 'Pet'} • ${p['breed'] ?? 'Unknown'} • ${p['gender'] ?? '-'} • ${p['age'] ?? '-'} yrs", 
-                        style: GoogleFonts.poppins(fontSize: 11)
+                        "${p['petType'] ?? 'Pet'} • ${p['breed'] ?? 'Unknown'} • ${p['gender'] ?? '-'} • ${p['age'] ?? '-'} yrs",
+                        style: GoogleFonts.poppins(fontSize: 11),
                       ),
                     );
                   },
@@ -284,7 +360,10 @@ class _SuperUsersPageState extends State<SuperUsersPage> {
             },
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Close')),
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Close'),
+            ),
           ],
         ),
       ),
@@ -297,10 +376,15 @@ class _SuperUsersPageState extends State<SuperUsersPage> {
         Icon(icon, color: const Color(0xFF64748B), size: 14),
         const SizedBox(width: 6),
         Expanded(
-          child: Text(text,
-              style: GoogleFonts.poppins(color: const Color(0xFF1E293B), fontSize: 11),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis),
+          child: Text(
+            text,
+            style: GoogleFonts.poppins(
+              color: const Color(0xFF1E293B),
+              fontSize: 11,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
       ],
     );

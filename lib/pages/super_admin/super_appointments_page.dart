@@ -24,7 +24,12 @@ class _SuperAppointmentsPageState extends State<SuperAppointmentsPage> {
     setState(() => _loading = true);
     try {
       final data = await AdminApiService.fetchApprovedAppointments();
-      if (mounted) setState(() { _appointments = data; _loading = false; });
+      if (mounted) {
+        setState(() {
+          _appointments = data;
+          _loading = false;
+        });
+      }
     } catch (_) {
       if (mounted) setState(() => _loading = false);
     }
@@ -44,10 +49,12 @@ class _SuperAppointmentsPageState extends State<SuperAppointmentsPage> {
           _buildHeader(),
           Expanded(
             child: _loading
-                ? const Center(child: CircularProgressIndicator(color: Color(0xFF10B981)))
+                ? const Center(
+                    child: CircularProgressIndicator(color: Color(0xFF10B981)),
+                  )
                 : _filtered.isEmpty
-                    ? _buildEmpty()
-                    : _buildList(),
+                ? _buildEmpty()
+                : _buildList(),
           ),
         ],
       ),
@@ -63,11 +70,20 @@ class _SuperAppointmentsPageState extends State<SuperAppointmentsPage> {
         children: [
           Row(
             children: [
-              Text('Approved Appointments',
-                  style: GoogleFonts.poppins(color: const Color(0xFF1E293B), fontWeight: FontWeight.w600, fontSize: 16)),
+              Text(
+                'Approved Appointments',
+                style: GoogleFonts.poppins(
+                  color: const Color(0xFF1E293B),
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                ),
+              ),
               const Spacer(),
               IconButton(
-                icon: const Icon(Icons.refresh_rounded, color: Color(0xFF10B981)),
+                icon: const Icon(
+                  Icons.refresh_rounded,
+                  color: Color(0xFF10B981),
+                ),
                 onPressed: _load,
               ),
             ],
@@ -85,13 +101,19 @@ class _SuperAppointmentsPageState extends State<SuperAppointmentsPage> {
                     selected: selected,
                     onSelected: (_) => setState(() => _filter = f),
                     backgroundColor: const Color(0xFFF8FAFF),
-                    selectedColor: const Color(0xFF10B981).withValues(alpha: 0.1),
+                    selectedColor: const Color(
+                      0xFF10B981,
+                    ).withValues(alpha: 0.1),
                     labelStyle: GoogleFonts.poppins(
-                      color: selected ? const Color(0xFF10B981) : const Color(0xFF64748B),
+                      color: selected
+                          ? const Color(0xFF10B981)
+                          : const Color(0xFF64748B),
                       fontSize: 12,
                     ),
                     side: BorderSide(
-                      color: selected ? const Color(0xFF10B981) : const Color(0xFFE2E8F0),
+                      color: selected
+                          ? const Color(0xFF10B981)
+                          : const Color(0xFFE2E8F0),
                     ),
                     checkmarkColor: const Color(0xFF10B981),
                   ),
@@ -110,10 +132,19 @@ class _SuperAppointmentsPageState extends State<SuperAppointmentsPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.event_busy_rounded, color: Color(0xFFE2E8F0), size: 56),
+          const Icon(
+            Icons.event_busy_rounded,
+            color: Color(0xFFE2E8F0),
+            size: 56,
+          ),
           const SizedBox(height: 16),
-          Text('No appointments found',
-              style: GoogleFonts.poppins(color: const Color(0xFF64748B), fontSize: 15)),
+          Text(
+            'No appointments found',
+            style: GoogleFonts.poppins(
+              color: const Color(0xFF64748B),
+              fontSize: 15,
+            ),
+          ),
         ],
       ),
     );
@@ -132,7 +163,9 @@ class _SuperAppointmentsPageState extends State<SuperAppointmentsPage> {
     final color = _statusColor(status);
     final dateStr = appt['dateTime'] as String? ?? '';
     DateTime? dt;
-    try { dt = DateTime.parse(dateStr); } catch (_) {}
+    try {
+      dt = DateTime.parse(dateStr);
+    } catch (_) {}
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -158,18 +191,37 @@ class _SuperAppointmentsPageState extends State<SuperAppointmentsPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(appt['service'] ?? 'Service',
-                    style: GoogleFonts.poppins(color: const Color(0xFF1E293B), fontWeight: FontWeight.w600, fontSize: 14)),
-                Text('Pet: ${appt['pet'] ?? '-'}  •  Dr. ${appt['doctor'] ?? '-'}',
-                    style: GoogleFonts.poppins(color: const Color(0xFF64748B), fontSize: 12)),
+                Text(
+                  appt['service'] ?? 'Service',
+                  style: GoogleFonts.poppins(
+                    color: const Color(0xFF1E293B),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
+                ),
+                Text(
+                  'Pet: ${appt['pet'] ?? '-'}  •  Dr. ${appt['doctor'] ?? '-'}',
+                  style: GoogleFonts.poppins(
+                    color: const Color(0xFF64748B),
+                    fontSize: 12,
+                  ),
+                ),
                 if (dt != null)
                   Text(
                     '${_weekday(dt.weekday)}, ${_month(dt.month)} ${dt.day}, ${dt.year}  ${_time(dt)}',
-                    style: GoogleFonts.poppins(color: const Color(0xFF94A3B8), fontSize: 11),
+                    style: GoogleFonts.poppins(
+                      color: const Color(0xFF94A3B8),
+                      fontSize: 11,
+                    ),
                   ),
                 if (appt['user_name'] != null)
-                  Text('Owner: ${appt['user_name']}',
-                      style: GoogleFonts.poppins(color: const Color(0xFF94A3B8), fontSize: 11)),
+                  Text(
+                    'Owner: ${appt['user_name']}',
+                    style: GoogleFonts.poppins(
+                      color: const Color(0xFF94A3B8),
+                      fontSize: 11,
+                    ),
+                  ),
               ],
             ),
           ),
@@ -179,8 +231,14 @@ class _SuperAppointmentsPageState extends State<SuperAppointmentsPage> {
               color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Text(status,
-                style: GoogleFonts.poppins(color: color, fontSize: 11, fontWeight: FontWeight.w600)),
+            child: Text(
+              status,
+              style: GoogleFonts.poppins(
+                color: color,
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
         ],
       ),
@@ -189,18 +247,36 @@ class _SuperAppointmentsPageState extends State<SuperAppointmentsPage> {
 
   Color _statusColor(String s) {
     switch (s) {
-      case 'approved': return const Color(0xFF3B82F6);
-      case 'completed': return const Color(0xFF10B981);
-      case 'rejected': return const Color(0xFFEF4444);
-      default: return const Color(0xFFF59E0B);
+      case 'approved':
+        return const Color(0xFF3B82F6);
+      case 'completed':
+        return const Color(0xFF10B981);
+      case 'rejected':
+        return const Color(0xFFEF4444);
+      default:
+        return const Color(0xFFF59E0B);
     }
   }
 
-  String _weekday(int w) => ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][w - 1];
-  String _month(int m) => ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][m - 1];
+  String _weekday(int w) =>
+      ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][w - 1];
+  String _month(int m) => [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ][m - 1];
   String _time(DateTime d) {
     final h = d.hour > 12 ? d.hour - 12 : (d.hour == 0 ? 12 : d.hour);
     final ampm = d.hour >= 12 ? 'PM' : 'AM';
-    return '$h:${d.minute.toString().padLeft(2,'0')} $ampm';
+    return '$h:${d.minute.toString().padLeft(2, '0')} $ampm';
   }
 }

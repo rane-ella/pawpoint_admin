@@ -17,7 +17,8 @@ class ErrorHandler {
         case 'network-request-failed':
           return 'Network error. Please check your connection.';
         default:
-          return error.message ?? 'An unexpected authentication error occurred.';
+          return error.message ??
+              'An unexpected authentication error occurred.';
       }
     }
 
@@ -25,7 +26,7 @@ class ErrorHandler {
     if (message.startsWith('Exception: ')) {
       return message.substring(11);
     }
-    
+
     return message;
   }
 }

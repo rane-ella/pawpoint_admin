@@ -24,21 +24,29 @@ class _SuperServicesPricingPageState extends State<SuperServicesPricingPage> {
     setState(() => _loading = true);
     try {
       final data = await AdminApiService.fetchServices();
-      if (mounted) setState(() { _services = data; _loading = false; });
+      if (mounted) {
+        setState(() {
+          _services = data;
+          _loading = false;
+        });
+      }
     } catch (_) {
       if (mounted) setState(() => _loading = false);
     }
   }
 
   void _showAddEditDialog({Map<String, dynamic>? existing}) {
-    final isEdit       = existing != null;
+    final isEdit = existing != null;
     final existingData = existing ?? {};
-    final nameCtrl   = TextEditingController(text: existingData['name'] ?? '');
-    final priceCtrl  = TextEditingController(
-        text: existingData['price'] != null
-            ? existingData['price'].toString()
-            : '');
-    final descCtrl   = TextEditingController(text: existingData['description'] ?? '');
+    final nameCtrl = TextEditingController(text: existingData['name'] ?? '');
+    final priceCtrl = TextEditingController(
+      text: existingData['price'] != null
+          ? existingData['price'].toString()
+          : '',
+    );
+    final descCtrl = TextEditingController(
+      text: existingData['description'] ?? '',
+    );
     bool isSaving = false;
 
     showDialog(
@@ -46,20 +54,34 @@ class _SuperServicesPricingPageState extends State<SuperServicesPricingPage> {
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setLocal) => AlertDialog(
           backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: Text(isEdit ? 'Edit Service' : 'Add New Service',
-              style: GoogleFonts.poppins(
-                  color: const Color(0xFF1E293B), fontWeight: FontWeight.w700)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Text(
+            isEdit ? 'Edit Service' : 'Add New Service',
+            style: GoogleFonts.poppins(
+              color: const Color(0xFF1E293B),
+              fontWeight: FontWeight.w700,
+            ),
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               _field(nameCtrl, 'Service Name', Icons.pets_rounded),
               const SizedBox(height: 10),
-              _field(priceCtrl, 'Base Price (₱)', Icons.attach_money_rounded,
-                  type: TextInputType.number),
+              _field(
+                priceCtrl,
+                'Base Price (₱)',
+                Icons.attach_money_rounded,
+                type: TextInputType.number,
+              ),
               const SizedBox(height: 10),
-              _field(descCtrl, 'Description (optional)',
-                  Icons.description_rounded, maxLines: 2),
+              _field(
+                descCtrl,
+                'Description (optional)',
+                Icons.description_rounded,
+                maxLines: 2,
+              ),
             ],
           ),
           actions: [
@@ -69,20 +91,25 @@ class _SuperServicesPricingPageState extends State<SuperServicesPricingPage> {
                   Navigator.pop(ctx);
                   await _deleteService(existingData['id'] as String);
                 },
-                child: Text('Delete',
-                    style: GoogleFonts.poppins(color: const Color(0xFFEF4444))),
+                child: Text(
+                  'Delete',
+                  style: GoogleFonts.poppins(color: const Color(0xFFEF4444)),
+                ),
               ),
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: Text('Cancel',
-                  style: GoogleFonts.poppins(color: const Color(0xFF94A3B8))),
+              child: Text(
+                'Cancel',
+                style: GoogleFonts.poppins(color: const Color(0xFF94A3B8)),
+              ),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF10B981),
                 elevation: 0,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
               onPressed: isSaving
                   ? null
@@ -111,10 +138,9 @@ class _SuperServicesPricingPageState extends State<SuperServicesPricingPage> {
                         }
                         if (ctx.mounted) Navigator.pop(ctx);
                         _showSnack(
-                            isEdit
-                                ? 'Service updated ✓'
-                                : 'Service added ✓',
-                            const Color(0xFF10B981));
+                          isEdit ? 'Service updated ✓' : 'Service added ✓',
+                          const Color(0xFF10B981),
+                        );
                         _load();
                       } catch (e) {
                         setLocal(() => isSaving = false);
@@ -123,12 +149,20 @@ class _SuperServicesPricingPageState extends State<SuperServicesPricingPage> {
                     },
               child: isSaving
                   ? const SizedBox(
-                      width: 18, height: 18,
+                      width: 18,
+                      height: 18,
                       child: CircularProgressIndicator(
-                          color: Colors.white, strokeWidth: 2))
-                  : Text(isEdit ? 'Save Changes' : 'Add Service',
+                        color: Colors.white,
+                        strokeWidth: 2,
+                      ),
+                    )
+                  : Text(
+                      isEdit ? 'Save Changes' : 'Add Service',
                       style: GoogleFonts.poppins(
-                          color: Colors.white, fontWeight: FontWeight.w600)),
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
             ),
           ],
         ),
@@ -146,8 +180,13 @@ class _SuperServicesPricingPageState extends State<SuperServicesPricingPage> {
     }
   }
 
-  Widget _field(TextEditingController ctrl, String hint, IconData icon,
-      {TextInputType type = TextInputType.text, int maxLines = 1}) {
+  Widget _field(
+    TextEditingController ctrl,
+    String hint,
+    IconData icon, {
+    TextInputType type = TextInputType.text,
+    int maxLines = 1,
+  }) {
     return TextField(
       controller: ctrl,
       style: const TextStyle(color: Color(0xFF1E293B)),
@@ -162,23 +201,30 @@ class _SuperServicesPricingPageState extends State<SuperServicesPricingPage> {
         filled: true,
         fillColor: const Color(0xFFF8FAFF),
         border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Color(0xFFE2E8F0))),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+        ),
         enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Color(0xFFE2E8F0))),
-        contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 14,
+          horizontal: 16,
+        ),
       ),
     );
   }
 
   void _showSnack(String msg, Color color) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(msg, style: GoogleFonts.poppins(color: Colors.white)),
-      backgroundColor: color,
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-    ));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(msg, style: GoogleFonts.poppins(color: Colors.white)),
+        backgroundColor: color,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+    );
   }
 
   @override
@@ -191,10 +237,11 @@ class _SuperServicesPricingPageState extends State<SuperServicesPricingPage> {
           Expanded(
             child: _loading
                 ? const Center(
-                    child: CircularProgressIndicator(color: Color(0xFF10B981)))
+                    child: CircularProgressIndicator(color: Color(0xFF10B981)),
+                  )
                 : _services.isEmpty
-                    ? _buildEmpty()
-                    : _buildList(),
+                ? _buildEmpty()
+                : _buildList(),
           ),
         ],
       ),
@@ -206,9 +253,13 @@ class _SuperServicesPricingPageState extends State<SuperServicesPricingPage> {
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
       child: Row(
         children: [
-          Text('${_services.length} service${_services.length == 1 ? '' : 's'}',
-              style: GoogleFonts.poppins(
-                  color: const Color(0xFF64748B), fontSize: 13)),
+          Text(
+            '${_services.length} service${_services.length == 1 ? '' : 's'}',
+            style: GoogleFonts.poppins(
+              color: const Color(0xFF64748B),
+              fontSize: 13,
+            ),
+          ),
           const Spacer(),
           IconButton(
             icon: const Icon(Icons.refresh_rounded, color: Color(0xFF94A3B8)),
@@ -217,16 +268,20 @@ class _SuperServicesPricingPageState extends State<SuperServicesPricingPage> {
           ElevatedButton.icon(
             onPressed: () => _showAddEditDialog(),
             icon: const Icon(Icons.add_rounded, size: 18, color: Colors.white),
-            label: Text('Add Service',
-                style: GoogleFonts.poppins(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600, fontSize: 13)),
+            label: Text(
+              'Add Service',
+              style: GoogleFonts.poppins(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                fontSize: 13,
+              ),
+            ),
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF10B981),
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
               elevation: 0,
             ),
           ),
@@ -240,18 +295,27 @@ class _SuperServicesPricingPageState extends State<SuperServicesPricingPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.local_offer_outlined,
-              color: Color(0xFFE2E8F0), size: 56),
+          const Icon(
+            Icons.local_offer_outlined,
+            color: Color(0xFFE2E8F0),
+            size: 56,
+          ),
           const SizedBox(height: 16),
-          Text('No services defined yet',
-              style: GoogleFonts.poppins(
-                  color: const Color(0xFF64748B), fontSize: 15)),
+          Text(
+            'No services defined yet',
+            style: GoogleFonts.poppins(
+              color: const Color(0xFF64748B),
+              fontSize: 15,
+            ),
+          ),
           const SizedBox(height: 8),
           TextButton.icon(
             onPressed: () => _showAddEditDialog(),
             icon: const Icon(Icons.add_rounded, color: Color(0xFF10B981)),
-            label: Text('Add first service',
-                style: GoogleFonts.poppins(color: const Color(0xFF10B981))),
+            label: Text(
+              'Add first service',
+              style: GoogleFonts.poppins(color: const Color(0xFF10B981)),
+            ),
           ),
         ],
       ),
@@ -269,8 +333,12 @@ class _SuperServicesPricingPageState extends State<SuperServicesPricingPage> {
   Widget _buildCard(Map<String, dynamic> s) {
     final price = (s['price'] as num?)?.toDouble() ?? 0.0;
     final serviceColors = const [
-      Color(0xFF6366F1), Color(0xFF10B981), Color(0xFFF59E0B),
-      Color(0xFF3B82F6), Color(0xFF8B5CF6), Color(0xFFEC4899),
+      Color(0xFF6366F1),
+      Color(0xFF10B981),
+      Color(0xFFF59E0B),
+      Color(0xFF3B82F6),
+      Color(0xFF8B5CF6),
+      Color(0xFFEC4899),
     ];
     final color = serviceColors[_services.indexOf(s) % serviceColors.length];
 
@@ -285,7 +353,8 @@ class _SuperServicesPricingPageState extends State<SuperServicesPricingPage> {
       child: Row(
         children: [
           Container(
-            width: 48, height: 48,
+            width: 48,
+            height: 48,
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
@@ -297,16 +366,24 @@ class _SuperServicesPricingPageState extends State<SuperServicesPricingPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(s['name'] ?? 'Unnamed Service',
-                    style: GoogleFonts.poppins(
-                        color: const Color(0xFF1E293B),
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14)),
+                Text(
+                  s['name'] ?? 'Unnamed Service',
+                  style: GoogleFonts.poppins(
+                    color: const Color(0xFF1E293B),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
+                ),
                 if ((s['description'] ?? '').toString().isNotEmpty)
-                  Text(s['description'],
-                      style: GoogleFonts.poppins(
-                          color: const Color(0xFF64748B), fontSize: 12),
-                      maxLines: 1, overflow: TextOverflow.ellipsis),
+                  Text(
+                    s['description'],
+                    style: GoogleFonts.poppins(
+                      color: const Color(0xFF64748B),
+                      fontSize: 12,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
               ],
             ),
           ),
@@ -314,25 +391,34 @@ class _SuperServicesPricingPageState extends State<SuperServicesPricingPage> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text('₱${price.toStringAsFixed(2)}',
-                  style: GoogleFonts.poppins(
-                      color: color,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16)),
+              Text(
+                '₱${price.toStringAsFixed(2)}',
+                style: GoogleFonts.poppins(
+                  color: color,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16,
+                ),
+              ),
               const SizedBox(height: 4),
               GestureDetector(
                 onTap: () => _showAddEditDialog(existing: s),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: color.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Text('Edit',
-                      style: GoogleFonts.poppins(
-                          color: color,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600)),
+                  child: Text(
+                    'Edit',
+                    style: GoogleFonts.poppins(
+                      color: color,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
               ),
             ],

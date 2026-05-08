@@ -22,11 +22,23 @@ class _StaffAdminShellState extends State<StaffAdminShell> {
   }
 
   final List<_NavEntry> _nav = [
-    _NavEntry(Icons.home_rounded,            Icons.home_outlined,             'Home'),
-    _NavEntry(Icons.pending_actions_rounded, Icons.pending_actions_outlined,  'Patients'),
-    _NavEntry(Icons.calendar_month_rounded,  Icons.calendar_month_outlined,   'Schedule'),
-    _NavEntry(Icons.chat_bubble_rounded,     Icons.chat_bubble_outline_rounded,'Messages'),
-    _NavEntry(Icons.person_rounded,          Icons.person_outlined,           'Profile'),
+    _NavEntry(Icons.home_rounded, Icons.home_outlined, 'Home'),
+    _NavEntry(
+      Icons.pending_actions_rounded,
+      Icons.pending_actions_outlined,
+      'Patients',
+    ),
+    _NavEntry(
+      Icons.calendar_month_rounded,
+      Icons.calendar_month_outlined,
+      'Schedule',
+    ),
+    _NavEntry(
+      Icons.chat_bubble_rounded,
+      Icons.chat_bubble_outline_rounded,
+      'Messages',
+    ),
+    _NavEntry(Icons.person_rounded, Icons.person_outlined, 'Profile'),
   ];
 
   late final List<Widget> _pages = [
@@ -52,12 +64,12 @@ class _StaffAdminShellState extends State<StaffAdminShell> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
-              blurRadius: 20,
-              offset: const Offset(0, -4))
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 20,
+            offset: const Offset(0, -4),
+          ),
         ],
-        borderRadius:
-            const BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: SafeArea(
         child: Padding(
@@ -65,14 +77,16 @@ class _StaffAdminShellState extends State<StaffAdminShell> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: List.generate(_nav.length, (i) {
-              final item     = _nav[i];
+              final item = _nav[i];
               final selected = _index == i;
               return GestureDetector(
                 onTap: () => setState(() => _index = i),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 10),
+                    horizontal: 16,
+                    vertical: 10,
+                  ),
                   decoration: BoxDecoration(
                     color: selected
                         ? Colors.black.withValues(alpha: 0.08)

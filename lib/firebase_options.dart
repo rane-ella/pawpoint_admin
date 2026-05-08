@@ -85,5 +85,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'pawpoint-8822d.firebasestorage.app',
     measurementId: 'G-JK33X6H63P',
   );
-
 }

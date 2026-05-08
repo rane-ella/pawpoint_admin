@@ -20,7 +20,8 @@ class AdminLoginPage extends StatefulWidget {
   State<AdminLoginPage> createState() => _AdminLoginPageState();
 }
 
-class _AdminLoginPageState extends State<AdminLoginPage> with SingleTickerProviderStateMixin {
+class _AdminLoginPageState extends State<AdminLoginPage>
+    with SingleTickerProviderStateMixin {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
@@ -75,7 +76,10 @@ class _AdminLoginPageState extends State<AdminLoginPage> with SingleTickerProvid
                     alignment: Alignment.centerLeft,
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+                        icon: const Icon(
+                          Icons.arrow_back_ios_new_rounded,
+                          size: 20,
+                        ),
                         onPressed: () => Navigator.pop(context),
                       ),
                       const Center(child: AppLogo(width: 200)),
@@ -90,7 +94,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> with SingleTickerProvid
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: Column(
                       children: [
-                        const SizedBox(height: 170), 
+                        const SizedBox(height: 170),
 
                         Stack(
                           clipBehavior: Clip.none,
@@ -100,19 +104,20 @@ class _AdminLoginPageState extends State<AdminLoginPage> with SingleTickerProvid
                               controller: _emailController,
                               hint: "Email Address",
                               prefixIcon: Icons.email_outlined,
-                              isRounded: true, 
+                              isRounded: true,
                               keyboardType: TextInputType.emailAddress,
                             ),
 
                             // The Cat Position
                             Positioned(
-                              top: -105, 
+                              top: -105,
                               child: IgnorePointer(
                                 child: Image.asset(
                                   "assets/images/c1.png",
                                   width: 250,
                                   fit: BoxFit.contain,
-                                  errorBuilder: (context, error, stackTrace) => const SizedBox(height: 100),
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      const SizedBox(height: 100),
                                 ),
                               ),
                             ),
@@ -129,7 +134,9 @@ class _AdminLoginPageState extends State<AdminLoginPage> with SingleTickerProvid
                           isRounded: true,
                           suffixIcon: IconButton(
                             icon: Icon(
-                              _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                              _obscurePassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
                               color: Colors.black45,
                             ),
                             onPressed: () {
@@ -179,10 +186,16 @@ class _AdminLoginPageState extends State<AdminLoginPage> with SingleTickerProvid
     final password = _passwordController.text.trim();
 
     final emailError = Validators.validateEmail(email);
-    if (emailError != null) { _showError(emailError); return; }
+    if (emailError != null) {
+      _showError(emailError);
+      return;
+    }
 
     final passwordError = Validators.validateRequired(password, "Password");
-    if (passwordError != null) { _showError(passwordError); return; }
+    if (passwordError != null) {
+      _showError(passwordError);
+      return;
+    }
 
     setState(() => _isLoading = true);
 
@@ -202,7 +215,9 @@ class _AdminLoginPageState extends State<AdminLoginPage> with SingleTickerProvid
 
       if (!adminDoc.exists) {
         await FirebaseAuth.instance.signOut();
-        _showError('Unauthorized Access: This account has no admin privileges.');
+        _showError(
+          'Unauthorized Access: This account has no admin privileges.',
+        );
         return;
       }
 
@@ -220,9 +235,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> with SingleTickerProvid
       if (credential.user != null && !credential.user!.emailVerified) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-            builder: (_) => VerifyAdminEmailPage(role: role),
-          ),
+          MaterialPageRoute(builder: (_) => VerifyAdminEmailPage(role: role)),
         );
         return;
       }
@@ -237,13 +250,23 @@ class _AdminLoginPageState extends State<AdminLoginPage> with SingleTickerProvid
 
       if (!mounted) return;
       if (role == 'super_admin') {
-        Navigator.pushNamedAndRemoveUntil(context, '/super_admin', (_) => false);
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/super_admin',
+          (_) => false,
+        );
       } else if (role == 'staff_admin') {
-        Navigator.pushNamedAndRemoveUntil(context, '/staff_admin', (_) => false);
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/staff_admin',
+          (_) => false,
+        );
       } else {
         await FirebaseAuth.instance.signOut();
         if (!mounted) return;
-        _showError('Unauthorized Access: Unknown role assigned to this account.');
+        _showError(
+          'Unauthorized Access: Unknown role assigned to this account.',
+        );
       }
     } catch (e) {
       if (mounted) _showError(ErrorHandler.getErrorMessage(e));

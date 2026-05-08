@@ -63,9 +63,13 @@ class _StaffDashboardPageState extends State<StaffDashboardPage> {
             _pending = results[0];
             _recentCancellations = results[1].where((a) {
               try {
-                final ts = DateTime.parse(a['rejected_at'] ?? a['cancelledAt'] ?? '');
+                final ts = DateTime.parse(
+                  a['rejected_at'] ?? a['cancelledAt'] ?? '',
+                );
                 return ts.isAfter(now.subtract(const Duration(hours: 24)));
-              } catch (_) { return false; }
+              } catch (_) {
+                return false;
+              }
             }).toList();
           } else {
             _pending = results[0].where((a) {
@@ -77,9 +81,13 @@ class _StaffDashboardPageState extends State<StaffDashboardPage> {
               final doctorField = (a['doctor'] as String? ?? '').toLowerCase();
               if (doctorField != currentDoctor) return false;
               try {
-                final ts = DateTime.parse(a['rejected_at'] ?? a['cancelledAt'] ?? '');
+                final ts = DateTime.parse(
+                  a['rejected_at'] ?? a['cancelledAt'] ?? '',
+                );
                 return ts.isAfter(now.subtract(const Duration(hours: 24)));
-              } catch (_) { return false; }
+              } catch (_) {
+                return false;
+              }
             }).toList();
           }
           _loading = false;
@@ -108,11 +116,15 @@ class _StaffDashboardPageState extends State<StaffDashboardPage> {
               _loading
                   ? const Padding(
                       padding: EdgeInsets.all(40),
-                      child: Center(child: CircularProgressIndicator(color: Color(0xFF10B981))),
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: Color(0xFF10B981),
+                        ),
+                      ),
                     )
                   : _pending.isEmpty
-                      ? _buildEmpty()
-                      : _buildPendingList(),
+                  ? _buildEmpty()
+                  : _buildPendingList(),
             ],
           ),
         ),
@@ -128,11 +140,20 @@ class _StaffDashboardPageState extends State<StaffDashboardPage> {
         children: [
           Row(
             children: [
-              const Icon(Icons.warning_amber_rounded, color: Color(0xFFEF4444), size: 18),
+              const Icon(
+                Icons.warning_amber_rounded,
+                color: Color(0xFFEF4444),
+                size: 18,
+              ),
               const SizedBox(width: 8),
-              Text('Recent Cancellations (24h)',
-                  style: GoogleFonts.poppins(
-                      color: const Color(0xFFEF4444), fontWeight: FontWeight.w700, fontSize: 13)),
+              Text(
+                'Recent Cancellations (24h)',
+                style: GoogleFonts.poppins(
+                  color: const Color(0xFFEF4444),
+                  fontWeight: FontWeight.w700,
+                  fontSize: 13,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 10),
@@ -152,7 +173,9 @@ class _StaffDashboardPageState extends State<StaffDashboardPage> {
       decoration: BoxDecoration(
         color: const Color(0xFFEF4444).withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFEF4444).withValues(alpha: 0.1)),
+        border: Border.all(
+          color: const Color(0xFFEF4444).withValues(alpha: 0.1),
+        ),
       ),
       child: Row(
         children: [
@@ -160,10 +183,21 @@ class _StaffDashboardPageState extends State<StaffDashboardPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(c['service'] ?? 'Service',
-                    style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 12, color: Colors.black87)),
-                Text('${c['user_name']} · Pet: ${c['pet']}',
-                    style: GoogleFonts.poppins(fontSize: 11, color: Colors.black54)),
+                Text(
+                  c['service'] ?? 'Service',
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 12,
+                    color: Colors.black87,
+                  ),
+                ),
+                Text(
+                  '${c['user_name']} · Pet: ${c['pet']}',
+                  style: GoogleFonts.poppins(
+                    fontSize: 11,
+                    color: Colors.black54,
+                  ),
+                ),
               ],
             ),
           ),
@@ -173,8 +207,14 @@ class _StaffDashboardPageState extends State<StaffDashboardPage> {
               color: const Color(0xFFEF4444).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Text(label,
-                style: GoogleFonts.poppins(color: const Color(0xFFEF4444), fontSize: 10, fontWeight: FontWeight.w600)),
+            child: Text(
+              label,
+              style: GoogleFonts.poppins(
+                color: const Color(0xFFEF4444),
+                fontSize: 10,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
         ],
       ),
@@ -198,16 +238,29 @@ class _StaffDashboardPageState extends State<StaffDashboardPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Good day, 👋',
-                    style: GoogleFonts.poppins(color: Colors.white70, fontSize: 14)),
+                Text(
+                  'Good day, 👋',
+                  style: GoogleFonts.poppins(
+                    color: Colors.white70,
+                    fontSize: 14,
+                  ),
+                ),
                 Text(
                   _doctorName ?? 'Doctor',
                   style: GoogleFonts.poppins(
-                      color: Colors.white, fontWeight: FontWeight.w700, fontSize: 22),
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 22,
+                  ),
                 ),
                 const SizedBox(height: 4),
-                Text('PawPoint Veterinary Staff',
-                    style: GoogleFonts.poppins(color: Colors.white70, fontSize: 12)),
+                Text(
+                  'PawAdmin Staff',
+                  style: GoogleFonts.poppins(
+                    color: Colors.white70,
+                    fontSize: 12,
+                  ),
+                ),
               ],
             ),
           ),
@@ -223,9 +276,10 @@ class _StaffDashboardPageState extends State<StaffDashboardPage> {
                   ? Text(
                       (_doctorName ?? 'D')[0].toUpperCase(),
                       style: GoogleFonts.poppins(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 22),
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 22,
+                      ),
                     )
                   : null,
             ),
@@ -240,17 +294,31 @@ class _StaffDashboardPageState extends State<StaffDashboardPage> {
       try {
         final dt = DateTime.parse(a['dateTime'] as String);
         final now = DateTime.now();
-        return dt.year == now.year && dt.month == now.month && dt.day == now.day;
-      } catch (_) { return false; }
+        return dt.year == now.year &&
+            dt.month == now.month &&
+            dt.day == now.day;
+      } catch (_) {
+        return false;
+      }
     }).length;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
       child: Row(
         children: [
-          _miniStat('Pending', '${_pending.length}', Icons.pending_actions_rounded, const Color(0xFFF59E0B)),
+          _miniStat(
+            'Pending',
+            '${_pending.length}',
+            Icons.pending_actions_rounded,
+            const Color(0xFFF59E0B),
+          ),
           const SizedBox(width: 12),
-          _miniStat('Today', '$today', Icons.today_rounded, const Color(0xFF6366F1)),
+          _miniStat(
+            'Today',
+            '$today',
+            Icons.today_rounded,
+            const Color(0xFF6366F1),
+          ),
         ],
       ),
     );
@@ -263,7 +331,13 @@ class _StaffDashboardPageState extends State<StaffDashboardPage> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
-          boxShadow: [BoxShadow(color: color.withValues(alpha: 0.12), blurRadius: 16, offset: const Offset(0, 4))],
+          boxShadow: [
+            BoxShadow(
+              color: color.withValues(alpha: 0.12),
+              blurRadius: 16,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Row(
           children: [
@@ -279,11 +353,21 @@ class _StaffDashboardPageState extends State<StaffDashboardPage> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(value,
-                    style: GoogleFonts.poppins(
-                        color: const Color(0xFF1E293B), fontWeight: FontWeight.w700, fontSize: 22)),
-                Text(label,
-                    style: GoogleFonts.poppins(color: const Color(0xFF94A3B8), fontSize: 11)),
+                Text(
+                  value,
+                  style: GoogleFonts.poppins(
+                    color: const Color(0xFF1E293B),
+                    fontWeight: FontWeight.w700,
+                    fontSize: 22,
+                  ),
+                ),
+                Text(
+                  label,
+                  style: GoogleFonts.poppins(
+                    color: const Color(0xFF94A3B8),
+                    fontSize: 11,
+                  ),
+                ),
               ],
             ),
           ],
@@ -295,9 +379,14 @@ class _StaffDashboardPageState extends State<StaffDashboardPage> {
   Widget _buildSectionTitle(String t) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
-      child: Text(t,
-          style: GoogleFonts.poppins(
-              color: const Color(0xFF1E293B), fontWeight: FontWeight.w700, fontSize: 16)),
+      child: Text(
+        t,
+        style: GoogleFonts.poppins(
+          color: const Color(0xFF1E293B),
+          fontWeight: FontWeight.w700,
+          fontSize: 16,
+        ),
+      ),
     );
   }
 
@@ -307,14 +396,27 @@ class _StaffDashboardPageState extends State<StaffDashboardPage> {
       child: Center(
         child: Column(
           children: [
-            const Icon(Icons.check_circle_outline_rounded,
-                color: Color(0xFF10B981), size: 56),
+            const Icon(
+              Icons.check_circle_outline_rounded,
+              color: Color(0xFF10B981),
+              size: 56,
+            ),
             const SizedBox(height: 16),
-            Text('All caught up!',
-                style: GoogleFonts.poppins(
-                    color: const Color(0xFF1E293B), fontWeight: FontWeight.w600, fontSize: 16)),
-            Text('No pending appointments.',
-                style: GoogleFonts.poppins(color: const Color(0xFF94A3B8), fontSize: 13)),
+            Text(
+              'All caught up!',
+              style: GoogleFonts.poppins(
+                color: const Color(0xFF1E293B),
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+              ),
+            ),
+            Text(
+              'No pending appointments.',
+              style: GoogleFonts.poppins(
+                color: const Color(0xFF94A3B8),
+                fontSize: 13,
+              ),
+            ),
           ],
         ),
       ),
@@ -333,7 +435,9 @@ class _StaffDashboardPageState extends State<StaffDashboardPage> {
 
   Widget _buildPendingCard(Map<String, dynamic> appt) {
     DateTime? dt;
-    try { dt = DateTime.parse(appt['dateTime'] as String); } catch (_) {}
+    try {
+      dt = DateTime.parse(appt['dateTime'] as String);
+    } catch (_) {}
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -341,7 +445,13 @@ class _StaffDashboardPageState extends State<StaffDashboardPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10, offset: const Offset(0, 2))],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Row(
         children: [
@@ -352,21 +462,40 @@ class _StaffDashboardPageState extends State<StaffDashboardPage> {
               color: const Color(0xFFF59E0B).withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Icon(Icons.pets_rounded, color: Color(0xFFF59E0B), size: 22),
+            child: const Icon(
+              Icons.pets_rounded,
+              color: Color(0xFFF59E0B),
+              size: 22,
+            ),
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(appt['service'] ?? 'Service',
-                    style: GoogleFonts.poppins(
-                        color: const Color(0xFF1E293B), fontWeight: FontWeight.w600, fontSize: 13)),
-                Text('${appt['user_name'] ?? 'Owner'} · ${appt['pet'] ?? 'Pet'}',
-                    style: GoogleFonts.poppins(color: const Color(0xFF94A3B8), fontSize: 11)),
+                Text(
+                  appt['service'] ?? 'Service',
+                  style: GoogleFonts.poppins(
+                    color: const Color(0xFF1E293B),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 13,
+                  ),
+                ),
+                Text(
+                  '${appt['user_name'] ?? 'Owner'} · ${appt['pet'] ?? 'Pet'}',
+                  style: GoogleFonts.poppins(
+                    color: const Color(0xFF94A3B8),
+                    fontSize: 11,
+                  ),
+                ),
                 if (dt != null)
-                  Text(_formatDate(dt),
-                      style: GoogleFonts.poppins(color: const Color(0xFF64748B), fontSize: 10)),
+                  Text(
+                    _formatDate(dt),
+                    style: GoogleFonts.poppins(
+                      color: const Color(0xFF64748B),
+                      fontSize: 10,
+                    ),
+                  ),
               ],
             ),
           ),
@@ -376,9 +505,14 @@ class _StaffDashboardPageState extends State<StaffDashboardPage> {
               color: const Color(0xFFF59E0B).withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Text('Pending',
-                style: GoogleFonts.poppins(
-                    color: const Color(0xFFF59E0B), fontSize: 11, fontWeight: FontWeight.w600)),
+            child: Text(
+              'Pending',
+              style: GoogleFonts.poppins(
+                color: const Color(0xFFF59E0B),
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
         ],
       ),
@@ -386,9 +520,22 @@ class _StaffDashboardPageState extends State<StaffDashboardPage> {
   }
 
   String _formatDate(DateTime d) {
-    final months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    final months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
     final h = d.hour > 12 ? d.hour - 12 : (d.hour == 0 ? 12 : d.hour);
     final ampm = d.hour >= 12 ? 'PM' : 'AM';
-    return '${months[d.month-1]} ${d.day}, ${d.year}  $h:${d.minute.toString().padLeft(2,'0')} $ampm';
+    return '${months[d.month - 1]} ${d.day}, ${d.year}  $h:${d.minute.toString().padLeft(2, '0')} $ampm';
   }
 }

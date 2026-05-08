@@ -102,13 +102,23 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
       builder: (_) => AlertDialog(
         backgroundColor: const Color(0xFF1E293B),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text('Approve Appointment',
-            style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.w700)),
+        title: Text(
+          'Approve Appointment',
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Service: ${appt['service']}\nPet: ${appt['pet']}',
-                style: GoogleFonts.poppins(color: const Color(0xFF94A3B8), fontSize: 13)),
+            Text(
+              'Service: ${appt['service']}\nPet: ${appt['pet']}',
+              style: GoogleFonts.poppins(
+                color: const Color(0xFF94A3B8),
+                fontSize: 13,
+              ),
+            ),
             const SizedBox(height: 16),
             TextField(
               controller: doctorCtrl,
@@ -127,12 +137,23 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text('Cancel', style: GoogleFonts.poppins(color: const Color(0xFF94A3B8))),
+            child: Text(
+              'Cancel',
+              style: GoogleFonts.poppins(color: const Color(0xFF94A3B8)),
+            ),
           ),
           ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF10B981)),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF10B981),
+            ),
             onPressed: () => Navigator.pop(context, true),
-            child: Text('Approve', style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.w600)),
+            child: Text(
+              'Approve',
+              style: GoogleFonts.poppins(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
         ],
       ),
@@ -154,7 +175,6 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
     }
   }
 
-
   Future<void> _cancelByAdmin(Map<String, dynamic> appt) async {
     final noteCtrl = TextEditingController();
     final confirmed = await showDialog<bool>(
@@ -162,17 +182,34 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
       builder: (_) => AlertDialog(
         backgroundColor: const Color(0xFF1E293B),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text('Cancel Appointment',
-            style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.w700)),
+        title: Text(
+          'Cancel Appointment',
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Cancel this appointment. The client will be notified.',
-                style: GoogleFonts.poppins(color: const Color(0xFF94A3B8), fontSize: 13, height: 1.4)),
+            Text(
+              'Cancel this appointment. The client will be notified.',
+              style: GoogleFonts.poppins(
+                color: const Color(0xFF94A3B8),
+                fontSize: 13,
+                height: 1.4,
+              ),
+            ),
             const SizedBox(height: 4),
-            Text('${appt['service']}  ·  Pet: ${appt['pet']}',
-                style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 13)),
+            Text(
+              '${appt['service']}  ·  Pet: ${appt['pet']}',
+              style: GoogleFonts.poppins(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                fontSize: 13,
+              ),
+            ),
             const SizedBox(height: 16),
             TextField(
               controller: noteCtrl,
@@ -185,12 +222,23 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text('Keep Appointment', style: GoogleFonts.poppins(color: const Color(0xFF94A3B8))),
+            child: Text(
+              'Keep Appointment',
+              style: GoogleFonts.poppins(color: const Color(0xFF94A3B8)),
+            ),
           ),
           ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFEF4444)),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFEF4444),
+            ),
             onPressed: () => Navigator.pop(context, true),
-            child: Text('Cancel Appointment', style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.w600)),
+            child: Text(
+              'Cancel Appointment',
+              style: GoogleFonts.poppins(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
         ],
       ),
@@ -254,32 +302,68 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
     if (pickedTime == null || !mounted) return;
 
     final newDt = DateTime(
-      pickedDate.year, pickedDate.month, pickedDate.day,
-      pickedTime.hour, pickedTime.minute,
+      pickedDate.year,
+      pickedDate.month,
+      pickedDate.day,
+      pickedTime.hour,
+      pickedTime.minute,
     );
 
     // Step 3 — confirm
-    final months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    final h = newDt.hour > 12 ? newDt.hour - 12 : (newDt.hour == 0 ? 12 : newDt.hour);
+    final months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    final h = newDt.hour > 12
+        ? newDt.hour - 12
+        : (newDt.hour == 0 ? 12 : newDt.hour);
     final min = newDt.minute.toString().padLeft(2, '0');
     final period = newDt.hour >= 12 ? 'PM' : 'AM';
-    final label = '${months[newDt.month-1]} ${newDt.day}, ${newDt.year}  ·  $h:$min $period';
+    final label =
+        '${months[newDt.month - 1]} ${newDt.day}, ${newDt.year}  ·  $h:$min $period';
 
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
         backgroundColor: const Color(0xFF1E293B),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text('Propose Reschedule',
-            style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.w700)),
+        title: Text(
+          'Propose Reschedule',
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Propose a new time for:', style: GoogleFonts.poppins(color: const Color(0xFF94A3B8), fontSize: 13)),
+            Text(
+              'Propose a new time for:',
+              style: GoogleFonts.poppins(
+                color: const Color(0xFF94A3B8),
+                fontSize: 13,
+              ),
+            ),
             const SizedBox(height: 4),
-            Text('${appt['service']}  ·  Pet: ${appt['pet']}',
-                style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 13)),
+            Text(
+              '${appt['service']}  ·  Pet: ${appt['pet']}',
+              style: GoogleFonts.poppins(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                fontSize: 13,
+              ),
+            ),
             const SizedBox(height: 16),
             Container(
               width: double.infinity,
@@ -287,33 +371,60 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
               decoration: BoxDecoration(
                 color: const Color(0xFF10B981).withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFF10B981).withValues(alpha: 0.4)),
+                border: Border.all(
+                  color: const Color(0xFF10B981).withValues(alpha: 0.4),
+                ),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.event_rounded, color: Color(0xFF10B981), size: 18),
+                  const Icon(
+                    Icons.event_rounded,
+                    color: Color(0xFF10B981),
+                    size: 18,
+                  ),
                   const SizedBox(width: 8),
-                  Text(label,
-                      style: GoogleFonts.poppins(
-                          color: const Color(0xFF10B981), fontWeight: FontWeight.w600, fontSize: 13)),
+                  Text(
+                    label,
+                    style: GoogleFonts.poppins(
+                      color: const Color(0xFF10B981),
+                      fontWeight: FontWeight.w600,
+                      fontSize: 13,
+                    ),
+                  ),
                 ],
               ),
             ),
             const SizedBox(height: 10),
-            Text('The user will be notified and must Accept or Decline.',
-                style: GoogleFonts.poppins(color: const Color(0xFF64748B), fontSize: 11, height: 1.5)),
+            Text(
+              'The user will be notified and must Accept or Decline.',
+              style: GoogleFonts.poppins(
+                color: const Color(0xFF64748B),
+                fontSize: 11,
+                height: 1.5,
+              ),
+            ),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text('Cancel', style: GoogleFonts.poppins(color: const Color(0xFF94A3B8))),
+            child: Text(
+              'Cancel',
+              style: GoogleFonts.poppins(color: const Color(0xFF94A3B8)),
+            ),
           ),
           ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF6366F1)),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF6366F1),
+            ),
             onPressed: () => Navigator.pop(context, true),
-            child: Text('Send Proposal',
-                style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.w600)),
+            child: Text(
+              'Send Proposal',
+              style: GoogleFonts.poppins(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
         ],
       ),
@@ -336,12 +447,14 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
   }
 
   void _showSnack(String msg, Color color) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(msg, style: GoogleFonts.poppins(color: Colors.white)),
-      backgroundColor: color,
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-    ));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(msg, style: GoogleFonts.poppins(color: Colors.white)),
+        backgroundColor: color,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+    );
   }
 
   InputDecoration _inputDecor(String hint) {
@@ -366,7 +479,9 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
           _buildTabs(),
           Expanded(
             child: _loading
-                ? const Center(child: CircularProgressIndicator(color: Color(0xFF10B981)))
+                ? const Center(
+                    child: CircularProgressIndicator(color: Color(0xFF10B981)),
+                  )
                 : TabBarView(
                     controller: _tabCtrl,
                     children: [
@@ -387,9 +502,14 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
       color: const Color(0xFFF8FAFF),
       child: Row(
         children: [
-          Text('Patients',
-              style: GoogleFonts.poppins(
-                  color: const Color(0xFF1E293B), fontWeight: FontWeight.w700, fontSize: 20)),
+          Text(
+            'Patients',
+            style: GoogleFonts.poppins(
+              color: const Color(0xFF1E293B),
+              fontWeight: FontWeight.w700,
+              fontSize: 20,
+            ),
+          ),
           const Spacer(),
           IconButton(
             icon: const Icon(Icons.refresh_rounded, color: Color(0xFF10B981)),
@@ -406,7 +526,13 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 10, offset: const Offset(0, 2))],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: TabBar(
         controller: _tabCtrl,
@@ -417,7 +543,10 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
         dividerColor: Colors.transparent,
         labelColor: Colors.white,
         unselectedLabelColor: const Color(0xFF94A3B8),
-        labelStyle: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 13),
+        labelStyle: GoogleFonts.poppins(
+          fontWeight: FontWeight.w600,
+          fontSize: 13,
+        ),
         tabs: [
           Tab(text: 'Pending (${_pending.length})'),
           Tab(text: 'Completed (${_completed.length})'),
@@ -433,10 +562,20 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.check_circle_outline_rounded, color: Color(0xFF10B981), size: 56),
+            const Icon(
+              Icons.check_circle_outline_rounded,
+              color: Color(0xFF10B981),
+              size: 56,
+            ),
             const SizedBox(height: 16),
-            Text('No pending appointments!',
-                style: GoogleFonts.poppins(color: const Color(0xFF1E293B), fontWeight: FontWeight.w600, fontSize: 15)),
+            Text(
+              'No pending appointments!',
+              style: GoogleFonts.poppins(
+                color: const Color(0xFF1E293B),
+                fontWeight: FontWeight.w600,
+                fontSize: 15,
+              ),
+            ),
           ],
         ),
       );
@@ -454,10 +593,20 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.history_rounded, color: Color(0xFF94A3B8), size: 56),
+            const Icon(
+              Icons.history_rounded,
+              color: Color(0xFF94A3B8),
+              size: 56,
+            ),
             const SizedBox(height: 16),
-            Text('No completed appointments yet.',
-                style: GoogleFonts.poppins(color: const Color(0xFF94A3B8), fontWeight: FontWeight.w600, fontSize: 15)),
+            Text(
+              'No completed appointments yet.',
+              style: GoogleFonts.poppins(
+                color: const Color(0xFF94A3B8),
+                fontWeight: FontWeight.w600,
+                fontSize: 15,
+              ),
+            ),
           ],
         ),
       );
@@ -475,10 +624,20 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.cancel_outlined, color: Color(0xFF94A3B8), size: 56),
+            const Icon(
+              Icons.cancel_outlined,
+              color: Color(0xFF94A3B8),
+              size: 56,
+            ),
             const SizedBox(height: 16),
-            Text('No rejected appointments.',
-                style: GoogleFonts.poppins(color: const Color(0xFF94A3B8), fontWeight: FontWeight.w600, fontSize: 15)),
+            Text(
+              'No rejected appointments.',
+              style: GoogleFonts.poppins(
+                color: const Color(0xFF94A3B8),
+                fontWeight: FontWeight.w600,
+                fontSize: 15,
+              ),
+            ),
           ],
         ),
       );
@@ -492,8 +651,23 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
 
   Widget _buildApptCard(Map<String, dynamic> appt) {
     DateTime? dt;
-    try { dt = DateTime.parse(appt['dateTime'] as String); } catch (_) {}
-    final months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    try {
+      dt = DateTime.parse(appt['dateTime'] as String);
+    } catch (_) {}
+    final months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
 
     return Card(
       margin: const EdgeInsets.only(bottom: 14),
@@ -512,29 +686,52 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
                     color: const Color(0xFFF59E0B).withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(Icons.pets_rounded, color: Color(0xFFF59E0B), size: 22),
+                  child: const Icon(
+                    Icons.pets_rounded,
+                    color: Color(0xFFF59E0B),
+                    size: 22,
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(appt['service'] ?? 'Service',
-                          style: GoogleFonts.poppins(
-                              color: const Color(0xFF1E293B), fontWeight: FontWeight.w700, fontSize: 14)),
-                      Text('${appt['user_name'] ?? 'Owner'} · Pet: ${appt['pet'] ?? '-'}',
-                          style: GoogleFonts.poppins(color: const Color(0xFF94A3B8), fontSize: 12)),
+                      Text(
+                        appt['service'] ?? 'Service',
+                        style: GoogleFonts.poppins(
+                          color: const Color(0xFF1E293B),
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                        ),
+                      ),
+                      Text(
+                        '${appt['user_name'] ?? 'Owner'} · Pet: ${appt['pet'] ?? '-'}',
+                        style: GoogleFonts.poppins(
+                          color: const Color(0xFF94A3B8),
+                          fontSize: 12,
+                        ),
+                      ),
                     ],
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: const Color(0xFFF59E0B).withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Text('Pending',
-                      style: GoogleFonts.poppins(color: const Color(0xFFF59E0B), fontSize: 11, fontWeight: FontWeight.w600)),
+                  child: Text(
+                    'Pending',
+                    style: GoogleFonts.poppins(
+                      color: const Color(0xFFF59E0B),
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -547,13 +744,21 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.calendar_today_rounded, color: Color(0xFF6366F1), size: 14),
+                  const Icon(
+                    Icons.calendar_today_rounded,
+                    color: Color(0xFF6366F1),
+                    size: 14,
+                  ),
                   const SizedBox(width: 6),
                   Text(
                     dt != null
-                        ? '${months[dt.month-1]} ${dt.day}, ${dt.year}  ${_timeStr(dt)}'
+                        ? '${months[dt.month - 1]} ${dt.day}, ${dt.year}  ${_timeStr(dt)}'
                         : 'Date unknown',
-                    style: GoogleFonts.poppins(color: const Color(0xFF1E293B), fontSize: 12, fontWeight: FontWeight.w500),
+                    style: GoogleFonts.poppins(
+                      color: const Color(0xFF1E293B),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ],
               ),
@@ -562,10 +767,19 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
               const SizedBox(height: 6),
               Row(
                 children: [
-                  const Icon(Icons.medical_services_outlined, color: Color(0xFF10B981), size: 14),
+                  const Icon(
+                    Icons.medical_services_outlined,
+                    color: Color(0xFF10B981),
+                    size: 14,
+                  ),
                   const SizedBox(width: 6),
-                  Text('Dr. ${appt['doctor']}',
-                      style: GoogleFonts.poppins(color: const Color(0xFF10B981), fontSize: 12)),
+                  Text(
+                    'Dr. ${appt['doctor']}',
+                    style: GoogleFonts.poppins(
+                      color: const Color(0xFF10B981),
+                      fontSize: 12,
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -578,12 +792,24 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
                   width: double.infinity,
                   child: OutlinedButton.icon(
                     onPressed: () => _cancelByAdmin(appt),
-                    icon: const Icon(Icons.money_off_rounded, size: 14, color: Color(0xFFEF4444)),
-                    label: Text('Cancel Appointment',
-                        style: GoogleFonts.poppins(color: const Color(0xFFEF4444), fontWeight: FontWeight.w600, fontSize: 12)),
+                    icon: const Icon(
+                      Icons.money_off_rounded,
+                      size: 14,
+                      color: Color(0xFFEF4444),
+                    ),
+                    label: Text(
+                      'Cancel Appointment',
+                      style: GoogleFonts.poppins(
+                        color: const Color(0xFFEF4444),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Color(0xFFEF4444)),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       padding: const EdgeInsets.symmetric(vertical: 10),
                     ),
                   ),
@@ -593,12 +819,24 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
                     Expanded(
                       child: OutlinedButton.icon(
                         onPressed: () => _reschedule(appt),
-                        icon: const Icon(Icons.edit_calendar_rounded, size: 14, color: Color(0xFF6366F1)),
-                        label: Text('Reschedule',
-                            style: GoogleFonts.poppins(color: const Color(0xFF6366F1), fontWeight: FontWeight.w600, fontSize: 12)),
+                        icon: const Icon(
+                          Icons.edit_calendar_rounded,
+                          size: 14,
+                          color: Color(0xFF6366F1),
+                        ),
+                        label: Text(
+                          'Reschedule',
+                          style: GoogleFonts.poppins(
+                            color: const Color(0xFF6366F1),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 12,
+                          ),
+                        ),
                         style: OutlinedButton.styleFrom(
                           side: const BorderSide(color: Color(0xFF6366F1)),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                           padding: const EdgeInsets.symmetric(vertical: 10),
                         ),
                       ),
@@ -607,12 +845,24 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: () => _approve(appt),
-                        icon: const Icon(Icons.check_rounded, size: 14, color: Colors.white),
-                        label: Text('Approve',
-                            style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 12)),
+                        icon: const Icon(
+                          Icons.check_rounded,
+                          size: 14,
+                          color: Colors.white,
+                        ),
+                        label: Text(
+                          'Approve',
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 12,
+                          ),
+                        ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF10B981),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           elevation: 0,
                         ),
@@ -630,8 +880,23 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
 
   Widget _buildCompletedCard(Map<String, dynamic> appt) {
     DateTime? dt;
-    try { dt = DateTime.parse(appt['dateTime'] as String); } catch (_) {}
-    final months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    try {
+      dt = DateTime.parse(appt['dateTime'] as String);
+    } catch (_) {}
+    final months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
 
     return Card(
       margin: const EdgeInsets.only(bottom: 14),
@@ -650,29 +915,52 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
                     color: const Color(0xFF10B981).withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(Icons.pets_rounded, color: Color(0xFF10B981), size: 22),
+                  child: const Icon(
+                    Icons.pets_rounded,
+                    color: Color(0xFF10B981),
+                    size: 22,
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(appt['service'] ?? 'Service',
-                          style: GoogleFonts.poppins(
-                              color: const Color(0xFF1E293B), fontWeight: FontWeight.w700, fontSize: 14)),
-                      Text('${appt['user_name'] ?? 'Owner'} · Pet: ${appt['pet'] ?? '-'}',
-                          style: GoogleFonts.poppins(color: const Color(0xFF94A3B8), fontSize: 12)),
+                      Text(
+                        appt['service'] ?? 'Service',
+                        style: GoogleFonts.poppins(
+                          color: const Color(0xFF1E293B),
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                        ),
+                      ),
+                      Text(
+                        '${appt['user_name'] ?? 'Owner'} · Pet: ${appt['pet'] ?? '-'}',
+                        style: GoogleFonts.poppins(
+                          color: const Color(0xFF94A3B8),
+                          fontSize: 12,
+                        ),
+                      ),
                     ],
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: const Color(0xFF10B981).withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Text('Completed',
-                      style: GoogleFonts.poppins(color: const Color(0xFF10B981), fontSize: 11, fontWeight: FontWeight.w600)),
+                  child: Text(
+                    'Completed',
+                    style: GoogleFonts.poppins(
+                      color: const Color(0xFF10B981),
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -685,13 +973,21 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.calendar_today_rounded, color: Color(0xFF6366F1), size: 14),
+                  const Icon(
+                    Icons.calendar_today_rounded,
+                    color: Color(0xFF6366F1),
+                    size: 14,
+                  ),
                   const SizedBox(width: 6),
                   Text(
                     dt != null
-                        ? '${months[dt.month-1]} ${dt.day}, ${dt.year}  ${_timeStr(dt)}'
+                        ? '${months[dt.month - 1]} ${dt.day}, ${dt.year}  ${_timeStr(dt)}'
                         : 'Date unknown',
-                    style: GoogleFonts.poppins(color: const Color(0xFF1E293B), fontSize: 12, fontWeight: FontWeight.w500),
+                    style: GoogleFonts.poppins(
+                      color: const Color(0xFF1E293B),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ],
               ),
@@ -700,10 +996,19 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
               const SizedBox(height: 6),
               Row(
                 children: [
-                  const Icon(Icons.medical_services_outlined, color: Color(0xFF10B981), size: 14),
+                  const Icon(
+                    Icons.medical_services_outlined,
+                    color: Color(0xFF10B981),
+                    size: 14,
+                  ),
                   const SizedBox(width: 6),
-                  Text('Dr. ${appt['doctor']}',
-                      style: GoogleFonts.poppins(color: const Color(0xFF10B981), fontSize: 12)),
+                  Text(
+                    'Dr. ${appt['doctor']}',
+                    style: GoogleFonts.poppins(
+                      color: const Color(0xFF10B981),
+                      fontSize: 12,
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -716,16 +1021,31 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
   String _timeStr(DateTime d) {
     final h = d.hour > 12 ? d.hour - 12 : (d.hour == 0 ? 12 : d.hour);
     final ampm = d.hour >= 12 ? 'PM' : 'AM';
-    return '$h:${d.minute.toString().padLeft(2,'0')} $ampm';
+    return '$h:${d.minute.toString().padLeft(2, '0')} $ampm';
   }
 
   Widget _buildRejectedCard(Map<String, dynamic> appt) {
     DateTime? dt;
-    try { dt = DateTime.parse(appt['dateTime'] as String); } catch (_) {}
-    final months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    try {
+      dt = DateTime.parse(appt['dateTime'] as String);
+    } catch (_) {}
+    final months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
     final note = (appt['doctor_note'] as String? ?? '').trim();
     final status = appt['status'] ?? 'rejected';
-    
+
     // Explicit labels for different non-approved states
     String label = 'Rejected';
     if (status == 'cancelled') label = 'User Cancelled';
@@ -748,29 +1068,52 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
                     color: const Color(0xFFEF4444).withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(Icons.pets_rounded, color: Color(0xFFEF4444), size: 22),
+                  child: const Icon(
+                    Icons.pets_rounded,
+                    color: Color(0xFFEF4444),
+                    size: 22,
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(appt['service'] ?? 'Service',
-                          style: GoogleFonts.poppins(
-                              color: const Color(0xFF1E293B), fontWeight: FontWeight.w700, fontSize: 14)),
-                      Text('${appt['user_name'] ?? 'Owner'} · Pet: ${appt['pet'] ?? '-'}',
-                          style: GoogleFonts.poppins(color: const Color(0xFF94A3B8), fontSize: 12)),
+                      Text(
+                        appt['service'] ?? 'Service',
+                        style: GoogleFonts.poppins(
+                          color: const Color(0xFF1E293B),
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                        ),
+                      ),
+                      Text(
+                        '${appt['user_name'] ?? 'Owner'} · Pet: ${appt['pet'] ?? '-'}',
+                        style: GoogleFonts.poppins(
+                          color: const Color(0xFF94A3B8),
+                          fontSize: 12,
+                        ),
+                      ),
                     ],
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: const Color(0xFFEF4444).withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Text(label,
-                      style: GoogleFonts.poppins(color: const Color(0xFFEF4444), fontSize: 11, fontWeight: FontWeight.w600)),
+                  child: Text(
+                    label,
+                    style: GoogleFonts.poppins(
+                      color: const Color(0xFFEF4444),
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -783,13 +1126,21 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.calendar_today_rounded, color: Color(0xFF6366F1), size: 14),
+                  const Icon(
+                    Icons.calendar_today_rounded,
+                    color: Color(0xFF6366F1),
+                    size: 14,
+                  ),
                   const SizedBox(width: 6),
                   Text(
                     dt != null
-                        ? '${months[dt.month-1]} ${dt.day}, ${dt.year}  ${_timeStr(dt)}'
+                        ? '${months[dt.month - 1]} ${dt.day}, ${dt.year}  ${_timeStr(dt)}'
                         : 'Date unknown',
-                    style: GoogleFonts.poppins(color: const Color(0xFF1E293B), fontSize: 12, fontWeight: FontWeight.w500),
+                    style: GoogleFonts.poppins(
+                      color: const Color(0xFF1E293B),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ],
               ),
@@ -798,7 +1149,10 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
               const SizedBox(height: 8),
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
                   color: const Color(0xFFEF4444).withValues(alpha: 0.07),
                   borderRadius: BorderRadius.circular(10),
@@ -806,11 +1160,20 @@ class _StaffAppointmentsPageState extends State<StaffAppointmentsPage>
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(Icons.info_outline_rounded, color: Color(0xFFEF4444), size: 14),
+                    const Icon(
+                      Icons.info_outline_rounded,
+                      color: Color(0xFFEF4444),
+                      size: 14,
+                    ),
                     const SizedBox(width: 6),
                     Expanded(
-                      child: Text('Reason: $note',
-                          style: GoogleFonts.poppins(color: const Color(0xFFEF4444), fontSize: 12)),
+                      child: Text(
+                        'Reason: $note',
+                        style: GoogleFonts.poppins(
+                          color: const Color(0xFFEF4444),
+                          fontSize: 12,
+                        ),
+                      ),
                     ),
                   ],
                 ),

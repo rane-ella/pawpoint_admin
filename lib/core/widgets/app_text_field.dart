@@ -46,16 +46,22 @@ class AppTextField extends StatelessWidget {
           helperText: helperText,
           hintStyle: AppTextStyles.hint,
           helperStyle: AppTextStyles.hint.copyWith(fontSize: 11),
-          prefixIcon: prefixIcon != null ? Icon(prefixIcon, size: 20, color: AppColors.grey) : null,
+          prefixIcon: prefixIcon != null
+              ? Icon(prefixIcon, size: 20, color: AppColors.grey)
+              : null,
           suffixIcon: suffixIcon,
-          border: isRounded ? InputBorder.none : OutlineInputBorder(
-            borderRadius: BorderRadius.circular(55),
-            borderSide: const BorderSide(color: Colors.black),
-          ),
-          enabledBorder: isRounded ? InputBorder.none : OutlineInputBorder(
-            borderRadius: BorderRadius.circular(55),
-            borderSide: const BorderSide(color: Colors.black),
-          ),
+          border: isRounded
+              ? InputBorder.none
+              : OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(55),
+                  borderSide: const BorderSide(color: Colors.black),
+                ),
+          enabledBorder: isRounded
+              ? InputBorder.none
+              : OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(55),
+                  borderSide: const BorderSide(color: Colors.black),
+                ),
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 25,
             vertical: 20,

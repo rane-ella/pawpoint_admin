@@ -41,7 +41,10 @@ class _StaffMessagesPageState extends State<StaffMessagesPage> {
     _loadConversations();
     _loadStaff();
     // Poll conversations every 5 seconds
-    _convTimer = Timer.periodic(const Duration(seconds: 5), (_) => _loadConversations());
+    _convTimer = Timer.periodic(
+      const Duration(seconds: 5),
+      (_) => _loadConversations(),
+    );
   }
 
   @override
@@ -57,7 +60,9 @@ class _StaffMessagesPageState extends State<StaffMessagesPage> {
   Future<void> _loadStaff() async {
     try {
       final staff = await AdminApiService.fetchStaff();
-      if (mounted) setState(() => _staff = List<Map<String, dynamic>>.from(staff));
+      if (mounted) {
+        setState(() => _staff = List<Map<String, dynamic>>.from(staff));
+      }
     } catch (_) {}
   }
 
@@ -80,7 +85,8 @@ class _StaffMessagesPageState extends State<StaffMessagesPage> {
     if (mounted) setState(() => _loadingMsgs = true);
     try {
       final convs = await AdminApiService.fetchConversations(_myUid);
-      final match = convs.cast<Map<String, dynamic>>()
+      final match = convs
+          .cast<Map<String, dynamic>>()
           .where((c) => c['conversation_id'] == convId)
           .toList();
       final msgs = match.isNotEmpty
@@ -142,9 +148,9 @@ class _StaffMessagesPageState extends State<StaffMessagesPage> {
       await _loadConversations();
     } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to send message')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Failed to send message')));
       }
     }
   }
@@ -152,9 +158,9 @@ class _StaffMessagesPageState extends State<StaffMessagesPage> {
   // ── Start New Chat ─────────────────────────────────────────────────────────
   void _startNewChat() {
     if (_staff.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Loading contacts...')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Loading contacts...')));
       _loadStaff();
       return;
     }
@@ -163,32 +169,55 @@ class _StaffMessagesPageState extends State<StaffMessagesPage> {
       builder: (ctx) => AlertDialog(
         backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text('Start Conversation',
-            style: GoogleFonts.poppins(color: Colors.black87, fontWeight: FontWeight.w600)),
+        title: Text(
+          'Start Conversation',
+          style: GoogleFonts.poppins(
+            color: Colors.black87,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         content: SizedBox(
           width: 400,
           height: 300,
           child: _staff.where((m) => m['uid'] != _myUid).isEmpty
               ? Center(
-                  child: Text('No other staff available',
-                      style: GoogleFonts.poppins(color: Colors.black45)),
+                  child: Text(
+                    'No other staff available',
+                    style: GoogleFonts.poppins(color: Colors.black45),
+                  ),
                 )
               : ListView(
-                  children: _staff
-                      .where((m) => m['uid'] != _myUid)
-                      .map((member) {
+                  children: _staff.where((m) => m['uid'] != _myUid).map((
+                    member,
+                  ) {
                     final uid = member['uid'] as String? ?? '';
                     final name = member['name'] as String? ?? 'Staff';
                     final role = member['role'] as String? ?? '';
                     return ListTile(
                       leading: CircleAvatar(
-                        backgroundColor: const Color(0xFF6366F1).withValues(alpha: 0.15),
-                        child: const Icon(Icons.person_rounded, color: Color(0xFF6366F1), size: 18),
+                        backgroundColor: const Color(
+                          0xFF6366F1,
+                        ).withValues(alpha: 0.15),
+                        child: const Icon(
+                          Icons.person_rounded,
+                          color: Color(0xFF6366F1),
+                          size: 18,
+                        ),
                       ),
-                      title: Text(name,
-                          style: GoogleFonts.poppins(color: Colors.black87, fontSize: 13)),
-                      subtitle: Text(role,
-                          style: GoogleFonts.poppins(color: Colors.black45, fontSize: 11)),
+                      title: Text(
+                        name,
+                        style: GoogleFonts.poppins(
+                          color: Colors.black87,
+                          fontSize: 13,
+                        ),
+                      ),
+                      subtitle: Text(
+                        role,
+                        style: GoogleFonts.poppins(
+                          color: Colors.black45,
+                          fontSize: 11,
+                        ),
+                      ),
                       onTap: () {
                         final convId = ([_myUid, uid]..sort()).join('__');
                         Navigator.pop(ctx);
@@ -201,7 +230,10 @@ class _StaffMessagesPageState extends State<StaffMessagesPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: Text('Cancel', style: GoogleFonts.poppins(color: Colors.black45)),
+            child: Text(
+              'Cancel',
+              style: GoogleFonts.poppins(color: Colors.black45),
+            ),
           ),
         ],
       ),
@@ -211,14 +243,21 @@ class _StaffMessagesPageState extends State<StaffMessagesPage> {
   // ── Helper: resolve peer name from conversation ───────────────────────────────
   String _peerName(Map<String, dynamic> conv) {
     final participants = (conv['participants'] as List?)?.cast<String>() ?? [];
-    final peerUid = participants.firstWhere((p) => p != _myUid, orElse: () => '');
+    final peerUid = participants.firstWhere(
+      (p) => p != _myUid,
+      orElse: () => '',
+    );
     if (peerUid.isEmpty) return 'Unknown';
     // 1. Try the loaded staff list first (most reliable)
     final staffMatch = _staff.where((s) => s['uid'] == peerUid).toList();
-    if (staffMatch.isNotEmpty) return staffMatch.first['name'] as String? ?? peerUid;
+    if (staffMatch.isNotEmpty) {
+      return staffMatch.first['name'] as String? ?? peerUid;
+    }
     // 2. Fall back to participant_names stored in the conversation doc
     final names = conv['participant_names'] as Map<String, dynamic>?;
-    if (names != null && names[peerUid] != null && (names[peerUid] as String).isNotEmpty) {
+    if (names != null &&
+        names[peerUid] != null &&
+        (names[peerUid] as String).isNotEmpty) {
       return names[peerUid] as String;
     }
     return peerUid;
@@ -277,11 +316,19 @@ class _StaffMessagesPageState extends State<StaffMessagesPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Messages',
-                    style: GoogleFonts.poppins(
-                        color: Colors.black87, fontWeight: FontWeight.w700, fontSize: 15)),
+                Text(
+                  'Messages',
+                  style: GoogleFonts.poppins(
+                    color: Colors.black87,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 15,
+                  ),
+                ),
                 IconButton(
-                  icon: const Icon(Icons.add_comment_rounded, color: Color(0xFF6366F1)),
+                  icon: const Icon(
+                    Icons.add_comment_rounded,
+                    color: Color(0xFF6366F1),
+                  ),
                   tooltip: 'New Chat',
                   onPressed: _startNewChat,
                 ),
@@ -290,46 +337,65 @@ class _StaffMessagesPageState extends State<StaffMessagesPage> {
           ),
           Expanded(
             child: _loadingConvs
-                ? const Center(child: CircularProgressIndicator(color: Color(0xFF6366F1)))
+                ? const Center(
+                    child: CircularProgressIndicator(color: Color(0xFF6366F1)),
+                  )
                 : _conversations.isEmpty
-                    ? Center(
-                        child: Text('No conversations yet',
-                            style: GoogleFonts.poppins(
-                                color: Colors.black38, fontSize: 13)),
-                      )
-                    : ListView.builder(
-                        itemCount: _conversations.length,
-                        itemBuilder: (_, i) {
-                          final conv = _conversations[i];
-                          final convId = conv['conversation_id'] as String? ?? '';
-                          final isActive = _activeConvId == convId;
-                          final name = _peerName(conv);
-                          final pUid = _peerUid(conv);
-                          return ListTile(
-                            selected: isActive,
-                            selectedTileColor: const Color(0xFF6366F1).withValues(alpha: 0.08),
-                            leading: CircleAvatar(
-                              backgroundColor:
-                                  const Color(0xFF6366F1).withValues(alpha: 0.15),
-                              child: const Icon(Icons.person_rounded,
-                                  color: Color(0xFF6366F1), size: 18),
-                            ),
-                            title: Text(name,
-                                style: GoogleFonts.poppins(
-                                    color: Colors.black87, fontSize: 13, fontWeight: FontWeight.w500),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis),
-                            subtitle: Text(
-                              conv['last_message'] ?? '',
-                              style: GoogleFonts.poppins(
-                                  color: Colors.black45, fontSize: 11),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            onTap: () => _openConversation(convId, name, pUid),
-                          );
-                        },
+                ? Center(
+                    child: Text(
+                      'No conversations yet',
+                      style: GoogleFonts.poppins(
+                        color: Colors.black38,
+                        fontSize: 13,
                       ),
+                    ),
+                  )
+                : ListView.builder(
+                    itemCount: _conversations.length,
+                    itemBuilder: (_, i) {
+                      final conv = _conversations[i];
+                      final convId = conv['conversation_id'] as String? ?? '';
+                      final isActive = _activeConvId == convId;
+                      final name = _peerName(conv);
+                      final pUid = _peerUid(conv);
+                      return ListTile(
+                        selected: isActive,
+                        selectedTileColor: const Color(
+                          0xFF6366F1,
+                        ).withValues(alpha: 0.08),
+                        leading: CircleAvatar(
+                          backgroundColor: const Color(
+                            0xFF6366F1,
+                          ).withValues(alpha: 0.15),
+                          child: const Icon(
+                            Icons.person_rounded,
+                            color: Color(0xFF6366F1),
+                            size: 18,
+                          ),
+                        ),
+                        title: Text(
+                          name,
+                          style: GoogleFonts.poppins(
+                            color: Colors.black87,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        subtitle: Text(
+                          conv['last_message'] ?? '',
+                          style: GoogleFonts.poppins(
+                            color: Colors.black45,
+                            fontSize: 11,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        onTap: () => _openConversation(convId, name, pUid),
+                      );
+                    },
+                  ),
           ),
         ],
       ),
@@ -341,11 +407,16 @@ class _StaffMessagesPageState extends State<StaffMessagesPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.chat_bubble_outline_rounded,
-              color: Color(0xFFCBD5E1), size: 56),
+          const Icon(
+            Icons.chat_bubble_outline_rounded,
+            color: Color(0xFFCBD5E1),
+            size: 56,
+          ),
           const SizedBox(height: 16),
-          Text('Select a contact to start chatting',
-              style: GoogleFonts.poppins(color: Colors.black38, fontSize: 15)),
+          Text(
+            'Select a contact to start chatting',
+            style: GoogleFonts.poppins(color: Colors.black38, fontSize: 15),
+          ),
         ],
       ),
     );
@@ -365,17 +436,27 @@ class _StaffMessagesPageState extends State<StaffMessagesPage> {
             children: [
               if (showBack)
                 IconButton(
-                  icon: const Icon(Icons.arrow_back_ios_rounded,
-                      size: 18, color: Colors.black87),
+                  icon: const Icon(
+                    Icons.arrow_back_ios_rounded,
+                    size: 18,
+                    color: Colors.black87,
+                  ),
                   onPressed: () => setState(() => _activeConvId = null),
                 ),
-              const Icon(Icons.person_outline_rounded, color: Color(0xFF6366F1), size: 20),
+              const Icon(
+                Icons.person_outline_rounded,
+                color: Color(0xFF6366F1),
+                size: 20,
+              ),
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
                   _activePeerName ?? 'Chat',
                   style: GoogleFonts.poppins(
-                      color: Colors.black87, fontWeight: FontWeight.w600, fontSize: 14),
+                    color: Colors.black87,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -383,7 +464,10 @@ class _StaffMessagesPageState extends State<StaffMessagesPage> {
                 const SizedBox(
                   width: 16,
                   height: 16,
-                  child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFF6366F1)),
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Color(0xFF6366F1),
+                  ),
                 ),
             ],
           ),
@@ -392,9 +476,13 @@ class _StaffMessagesPageState extends State<StaffMessagesPage> {
         Expanded(
           child: _messages.isEmpty && !_loadingMsgs
               ? Center(
-                  child: Text('No messages yet. Say hello! 👋',
-                      style:
-                          GoogleFonts.poppins(color: Colors.black38, fontSize: 13)),
+                  child: Text(
+                    'No messages yet. Say hello! 👋',
+                    style: GoogleFonts.poppins(
+                      color: Colors.black38,
+                      fontSize: 13,
+                    ),
+                  ),
                 )
               : ListView.builder(
                   controller: _scrollCtrl,
@@ -427,21 +515,30 @@ class _StaffMessagesPageState extends State<StaffMessagesPage> {
           border: isMe ? null : Border.all(color: const Color(0xFFE2E8F0)),
         ),
         child: Column(
-          crossAxisAlignment:
-              isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          crossAxisAlignment: isMe
+              ? CrossAxisAlignment.end
+              : CrossAxisAlignment.start,
           children: [
             if (!isMe)
               Padding(
                 padding: const EdgeInsets.only(bottom: 4),
-                child: Text(msg['sender_name'] ?? 'Admin',
-                    style: GoogleFonts.poppins(
-                        color: const Color(0xFF6366F1), fontSize: 10, fontWeight: FontWeight.w600)),
+                child: Text(
+                  msg['sender_name'] ?? 'Admin',
+                  style: GoogleFonts.poppins(
+                    color: const Color(0xFF6366F1),
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
-            Text(msg['content'] ?? '',
-                style: GoogleFonts.poppins(
-                    color: isMe ? Colors.white : Colors.black87,
-                    fontSize: 13,
-                    height: 1.4)),
+            Text(
+              msg['content'] ?? '',
+              style: GoogleFonts.poppins(
+                color: isMe ? Colors.white : Colors.black87,
+                fontSize: 13,
+                height: 1.4,
+              ),
+            ),
           ],
         ),
       ),
@@ -464,13 +561,20 @@ class _StaffMessagesPageState extends State<StaffMessagesPage> {
               style: GoogleFonts.poppins(color: Colors.black87, fontSize: 13),
               decoration: InputDecoration(
                 hintText: 'Type your message...',
-                hintStyle: GoogleFonts.poppins(color: Colors.black38, fontSize: 13),
+                hintStyle: GoogleFonts.poppins(
+                  color: Colors.black38,
+                  fontSize: 13,
+                ),
                 filled: true,
                 fillColor: const Color(0xFFF1F5F9),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none),
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
               ),
             ),
           ),

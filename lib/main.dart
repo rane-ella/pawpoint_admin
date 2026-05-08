@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'PawPoint Admin',
+      title: 'PawAdmin',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
@@ -38,7 +38,9 @@ class MyApp extends StatelessWidget {
         '/super_admin': (context) => const SuperAdminDashboard(),
         '/staff_admin': (context) => const StaffAdminDashboard(),
         '/verify-email': (context) {
-          final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+          final args =
+              ModalRoute.of(context)!.settings.arguments
+                  as Map<String, dynamic>;
           return VerifyAdminEmailPage(role: args['role']);
         },
       },
